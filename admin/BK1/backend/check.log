@@ -1,0 +1,248 @@
+Received POST Data:
+[]
+
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{"survey_image":"C:\\fakepath\\icon.jpg"},{"survey_image":"C:\\fakepath\\HD1.jpg"},{"survey_image":"C:\\fakepath\\HD2.jpg"}]
+)
+
+FILES Data:
+Array
+(
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{"survey_image":"C:\\fakepath\\icon.jpg"},{"survey_image":"C:\\fakepath\\HD1.jpg"},{"survey_image":"C:\\fakepath\\HD2.jpg"}]
+)
+
+FILES Data:
+Array
+(
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{"survey_image":"C:\\fakepath\\icon.jpg"},{"survey_image":"C:\\fakepath\\HD2.jpg"},{"survey_image":"C:\\fakepath\\HD1.jpg"}]
+)
+
+FILES Data:
+Array
+(
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{"survey_image":"C:\\fakepath\\icon.jpg"},{"survey_image":"C:\\fakepath\\HD1.jpg"},{"survey_image":"C:\\fakepath\\HD2.jpg"}]
+)
+
+FILES Data:
+Array
+(
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{"survey_image":"C:\\fakepath\\icon.jpg"},{"survey_image":"C:\\fakepath\\HD1.jpg"},{"survey_image":"C:\\fakepath\\HD2.jpg"}]
+)
+
+FILES Data:
+Array
+(
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{},{},{}]
+)
+
+FILES Data:
+Array
+(
+    [images] => Array
+        (
+            [name] => Array
+                (
+                    [0] => icon.jpg
+                    [1] => HD1.jpg
+                    [2] => HD2.jpg
+                )
+
+            [full_path] => Array
+                (
+                    [0] => icon.jpg
+                    [1] => HD1.jpg
+                    [2] => HD2.jpg
+                )
+
+            [type] => Array
+                (
+                    [0] => image/jpeg
+                    [1] => image/jpeg
+                    [2] => image/jpeg
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => /tmp/phpcRpnm7
+                    [1] => /tmp/php6bbL0P
+                    [2] => /tmp/phpCTvbFy
+                )
+
+            [error] => Array
+                (
+                    [0] => 0
+                    [1] => 0
+                    [2] => 0
+                )
+
+            [size] => Array
+                (
+                    [0] => 94992
+                    [1] => 97190
+                    [2] => 508348
+                )
+
+        )
+
+)
+
+Sector Name: default_sector
+POST Data:
+Array
+(
+    [sector_names] => Array
+        (
+            [0] => BAN0002_1
+            [1] => BAN0002_2
+            [2] => BAN0002_3
+        )
+
+    [site_name] => BAN0002
+    [number_of_sector] => 3
+    [sectors_data] => [{},{},{}]
+)
+
+FILES Data:
+Array
+(
+    [images] => Array
+        (
+            [name] => Array
+                (
+                    [0] => icon.jpg
+                    [1] => HD1.jpg
+                    [2] => HD2.jpg
+                )
+
+            [full_path] => Array
+                (
+                    [0] => icon.jpg
+                    [1] => HD1.jpg
+                    [2] => HD2.jpg
+                )
+
+            [type] => Array
+                (
+                    [0] => image/jpeg
+                    [1] => image/jpeg
+                    [2] => image/jpeg
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => /tmp/phpywKAZg
+                    [1] => /tmp/phptP4xNm
+                    [2] => /tmp/phpgFHSBs
+                )
+
+            [error] => Array
+                (
+                    [0] => 0
+                    [1] => 0
+                    [2] => 0
+                )
+
+            [size] => Array
+                (
+                    [0] => 94992
+                    [1] => 97190
+                    [2] => 508348
+                )
+
+        )
+
+)
+
+Sector Names: Array
+(
+    [0] => BAN0002_1
+    [1] => BAN0002_2
+    [2] => BAN0002_3
+)
+

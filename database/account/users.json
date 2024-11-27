@@ -1,0 +1,16 @@
+[
+    {
+        "fullname": "STAFF 1",
+        "email": "staff@gmail.com",
+        "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
+        "phone": "11111",
+        "role": "staff"
+    },
+    {
+        "fullname": "ADMIN",
+        "email": "admin@gmail.com",
+        "password": "$2y$10$zbDQQdO8EDuDUgzdsTuZ8OWu32w06Ky1rrnnXBdG40.Z3I7p9WDyO",
+        "phone": "11111",
+        "role": "admin"
+    }
+]

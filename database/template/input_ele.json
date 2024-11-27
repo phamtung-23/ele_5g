@@ -1,0 +1,513 @@
+[
+  {
+    "Id": 1,
+    "Item": "Chi nhánh",
+    "Variable": "province",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 2,
+    "Item": "Mã trạm 7",
+    "Variable": "station_code_7",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 3,
+    "Item": "Mã trạm",
+    "Variable": "station_code",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 4,
+    "Item": "Team",
+    "Variable": "team",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 5,
+    "Item": "Loại trạm",
+    "Variable": "station_type",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 6,
+    "Item": "Loại nhà trạm",
+    "Variable": "substation_type",
+    "Option": "",
+    "Note": ""
+  },
+  {
+    "Id": 7,
+    "Item": "Aptomat điện lực EDC",
+    "Variable": "edc_circuit_breaker",
+    "Option": "C32 / C40 / C63",
+    "Note": "Aptomat điện lực EDC\n1: C32\n2: C40\n3: C63\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 8,
+    "Item": "Lưới điện",
+    "Variable": "power_grid",
+    "Option": "1 pha / 3 pha",
+    "Note": "Lưới điện\n1: 1 pha\n2: 3 pha\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 9,
+    "Item": "Loại dây từ công tơ đến trạm",
+    "Variable": "cable_type_from_meter_to_station",
+    "Option": "Đồng / Nhôm",
+    "Note": "Loại dây từ công tơ đến trạm\n1: Đồng\n2: nhôm\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 10,
+    "Item": "Tiết diện dây đang sử dụng",
+    "Variable": "current_cable_cross_section",
+    "Option": "10mm² / 16mm² / 25mm² / 35mm² / 50mm² / 70mm²",
+    "Note": "Tiết diện dây đang sử dụng\n1: 10mm2\n2: 16mm2\n3: 25mm2\n4: 35mm2\n5: 50mm2\n6: 70mm2\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 11,
+    "Item": "Trạm Có Aptomat nhập trạm?",
+    "Variable": "substation_has_edc_circuit_breaker",
+    "Option": "Yes / No",
+    "Note": "Trạm Có Aptomat nhập trạm?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 12,
+    "Item": "Aptomat nhập trạm",
+    "Variable": "edc_circuit_breaker_installed",
+    "Option": "C32 / C40 / C63",
+    "Note": "Aptomat nhập trạm\n1: C32\n2: C40\n3: C63\n(Nếu không có không cần nhập)"
+  },
+  {
+    "Id": 13,
+    "Item": "Khoảng cách từ công tơ đến trạm",
+    "Variable": "distance_from_meter_to_station",
+    "Option": "(Chỉ nhập, đơn vị: m)",
+    "Note": "Khoảng cách từ công tơ đến trạm\n(m)\n(Chỉ nhập số)\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 14,
+    "Item": "Trạm điện yếu?",
+    "Variable": "weak_station",
+    "Option": "Yes / No",
+    "Note": "Trạm điện yếu?\n1: Yes\n2: No\n(Trạm có điện áp <180V)\n(Trạm fix không cần nhập)"
+  },
+  {
+    "Id": 15,
+    "Item": "Trạm điện yếu có khả năng kéo điện 3P không?",
+    "Variable": "weak_station_capable_of_pulling_3_phase_power",
+    "Option": "Yes / No",
+    "Note": "Trạm điện yếu có khả năng kéo điện 3P không?\n1: Yes\n2: No\n(Nếu trạm điện không yếu không cần điền)"
+  },
+  {
+    "Id": 16,
+    "Item": "Khoảng cách đến điểm đấu điện 3 pha nếu đấu",
+    "Variable": "distance_to_3_phase_connection_point_if_connected",
+    "Option": "(Chỉ nhập, nếu không đấu, không cần điền)",
+    "Note": "Khoảng cách đến điểm đấu điện 3 pha nếu đấu\n(Nếu trạm điện không yếu không cần điền)"
+  },
+  {
+    "Id": 17,
+    "Item": "Tủ AC_1_Loại tủ AC",
+    "Variable": "ac_cabinet_1_type",
+    "Option": "Don’t have / V5-1P / V5-3P / AC box",
+    "Note": "Tủ AC_1_Loại tủ AC:\n0: Don’t have\n1: V5-1P\n2: V5-3P\n3: AC box"
+  },
+  {
+    "Id": 18,
+    "Item": "Tủ AC1_CB (>C32) tủ AC chưa sử dụng",
+    "Variable": "ac_cabinet_1_cb_not_in_use",
+    "Option": "",
+    "Note": "Tủ AC1_Số CB (>C32) tủ AC chưa sử dụng"
+  },
+  {
+    "Id": 19,
+    "Item": "Tủ AC2_Loại tủ AC",
+    "Variable": "ac_cabinet_2_type",
+    "Option": "Don’t have / V5-1P / V5-3P / AC box",
+    "Note": "Tủ AC2_Loại tủ AC:\n0: Don’t have\n1: V5-1P\n2: V5-3P\n3: AC box"
+  },
+  {
+    "Id": 20,
+    "Item": "Tủ AC2_CB (>C32) tủ AC chưa sử dụng",
+    "Variable": "ac_cabinet_2_cb_not_in_use",
+    "Option": "",
+    "Note": "Tủ AC2_Số CB (>C32) tủ AC chưa sử dụng"
+  },
+  {
+    "Id": 21,
+    "Item": "Số lượng tủ DC tại trạm",
+    "Variable": "number_of_dc_cabinets_at_station",
+    "Option": "",
+    "Note": "Số lượng tủ DC tại trạm"
+  },
+  {
+    "Id": 22,
+    "Item": "Tủ DC1_CB (>C63 ) chưa sử dụng trong tủ DC",
+    "Variable": "dc_cabinet_1_cb_not_in_use",
+    "Option": "",
+    "Note": "Tủ DC1_Số lượng CB (>C63 ) chưa sử dụng trong tủ DC"
+  },
+  {
+    "Id": 23,
+    "Item": "Tủ DC1_Có vị trí lắp thêm CB (>C63) trong tủ DC không?",
+    "Variable": "dc_cabinet_1_has_space_for_additional_cb",
+    "Option": "Yes / No",
+    "Note": "Tủ DC1_Có vị trí lắp thêm CB (>C63) trong tủ DC không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 24,
+    "Item": "Tủ DC1_CB (>C63 ) có thể lắp thêm trong tủ DC",
+    "Variable": "dc_cabinet_1_can_add_more_cb",
+    "Option": "(Chỉ nhập, nếu không lắp thêm không cần cập nhật)",
+    "Note": "Tủ DC1_Số lượng CB (>C63 ) có thể lắp thêm trong tủ DC\n(Nếu không lắp thêm CB không cần cập nhật)"
+  },
+  {
+    "Id": 25,
+    "Item": "Tủ DC1_Nguyên nhân không lắp thêm được CB trong tủ DC",
+    "Variable": "dc_cabinet_1_reason_for_not_adding_cb",
+    "Option": "Tủ không có vị trí lắp / Trạm có kế hoạch hủy hoặc di dời / Khác",
+    "Note": "Tủ DC1_Nguyên nhân không lắp thêm được CB trong tủ DC\n1: Tủ không có vị trí lắp\n2: Trạm có kế hoạch hủy/ di dời.\n3. Khác"
+  },
+  {
+    "Id": 26,
+    "Item": "Tủ DC2_CB (>C63 ) chưa sử dụng trong tủ DC",
+    "Variable": "dc_cabinet_2_cb_not_in_use",
+    "Option": "",
+    "Note": "Tủ DC2_Số lượng CB (>C63 ) chưa sử dụng trong tủ DC"
+  },
+  {
+    "Id": 27,
+    "Item": "Tủ DC2_Có vị trí lắp thêm CB (>C63) trong tủ DC không?",
+    "Variable": "dc_cabinet_2_has_space_for_additional_cb",
+    "Option": "Yes / No",
+    "Note": "Tủ DC2_Có vị trí lắp thêm CB (>C63) trong tủ DC không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 28,
+    "Item": "Tủ DC2_CB (>C63 ) có thể lắp thêm trong tủ DC",
+    "Variable": "dc_cabinet_2_can_add_more_cb",
+    "Option": "(Chỉ nhập, nếu không lắp thêm không cần cập nhật)",
+    "Note": "Tủ DC2_Số lượng CB (>C63 ) có thể lắp thêm trong tủ DC\n(Nếu không lắp thêm CB không cần cập nhật)"
+  },
+  {
+    "Id": 29,
+    "Item": "Tủ DC2_Nguyên nhân không lắp thêm được CB trong tủ DC",
+    "Variable": "dc_cabinet_2_reason_for_not_adding_cb",
+    "Option": "Tủ không có vị trí lắp / Trạm có kế hoạch hủy hoặc di dời / Khác",
+    "Note": "Tủ DC2_Nguyên nhân không lắp thêm được CB trong tủ DC\n1: Tủ không có vị trí lắp\n2: Trạm có kế hoạch hủy/ di dời.\n3. Khác"
+  },
+  {
+    "Id": 30,
+    "Item": "Tủ DC3_CB (>C63 ) chưa sử dụng trong tủ DC",
+    "Variable": "dc_cabinet_3_cb_not_in_use",
+    "Option": "",
+    "Note": "Tủ DC3_Số lượng CB (>C63 ) chưa sử dụng trong tủ DC"
+  },
+  {
+    "Id": 31,
+    "Item": "Tủ DC3_Có vị trí lắp thêm CB (>C63) trong tủ DC không?",
+    "Variable": "dc_cabinet_3_has_space_for_additional_cb",
+    "Option": "Yes / No",
+    "Note": "Tủ DC3_Có vị trí lắp thêm CB (>C63) trong tủ DC không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 32,
+    "Item": "Tủ DC3_CB (>C63 ) có thể lắp thêm trong tủ DC",
+    "Variable": "dc_cabinet_3_can_add_more_cb",
+    "Option": "(Chỉ nhập, nếu không lắp thêm không cần cập nhật)",
+    "Note": "Tủ DC3_Số lượng CB (>C63 ) có thể lắp thêm trong tủ DC\n(Nếu không lắp thêm CB không cần cập nhật)"
+  },
+  {
+    "Id": 33,
+    "Item": "Tủ DC3_Nguyên nhân không lắp thêm được CB trong tủ DC",
+    "Variable": "dc_cabinet_3_reason_for_not_adding_cb",
+    "Option": "Tủ không có vị trí lắp / Trạm có kế hoạch hủy hoặc di dời / Khác",
+    "Note": "Tủ DC3_Nguyên nhân không lắp thêm được CB trong tủ DC\n1: Tủ không có vị trí lắp\n2: Trạm có kế hoạch hủy/ di dời.\n3. Khác"
+  },
+  {
+    "Id": 34,
+    "Item": "Nếu không lắp thêm được CB thì có vị trí lắp thêm tủ nguồn DC không?",
+    "Variable": "if_no_more_cb_can_add_dc_power_cabinet",
+    "Option": "Yes / No",
+    "Note": "Nếu không lắp thêm được CB thì có vị trí lắp thêm tủ nguồn DC không?\n(Kích thước cần để lắp Dài x Rộng x Cao = 1 x  0.8 x 2 m)\n1: Yes\n2: No"
+  },
+  {
+    "Id": 35,
+    "Item": "Nguyên nhân không lắp thêm được tủ DC",
+    "Variable": "reason_for_not_adding_dc_cabinet",
+    "Option": "Tủ không có vị trí lắp / Trạm có kế hoạch hủy hoặc di dời / Khác",
+    "Note": "Nguyên nhân không lắp thêm được tủ DC\n1: Tủ không có vị trí lắp\n2: Trạm có kế hoạch hủy/ di dời.\n3. Khác"
+  },
+  {
+    "Id": 36,
+    "Item": "Trạm có lắp được thêm tủ outdoor không?",
+    "Variable": "can_station_install_additional_outdoor_cabinet",
+    "Option": "Yes / No",
+    "Note": "Trạm có lắp được thêm tủ outdoor không?\n1: Yes\n2: No\n( kích thước cần để lắp  Dài x Rộng = 1.5x1.2 m)"
+  },
+  {
+    "Id": 37,
+    "Item": "Nguyên nhân không lắp được tủ outdoor",
+    "Variable": "reason_for_not_installing_outdoor_cabinet",
+    "Option": "Không có vị trí lắp đặt tủ outdoor / Không đưa được tủ vào vị trí lắp đặt / Trạm có KH hủy hoặc di dời / Trạm dân kiện / Chủ nhà không cho lắp đặt bổ sung / Khác",
+    "Note": "Nguyên nhân không lắp được tủ outdoor\n1: Không có vị trí lắp đặt tủ outdoor\n2: Không đưa được tủ vào vị trí lắp đặt\n3: trạm có KH hủy/di dời\n4: trạm dân kiện/ Chủ nhà không cho lắp đặt bổ sung\n5: khác"
+  },
+  {
+    "Id": 38,
+    "Item": "Model",
+    "Variable": "model",
+    "Option": "Không có / iMAX / Viet Vuong / Quang Thong / Beeline",
+    "Note": "Model\n0. Không có\n1. iMAX\n2. Viet Vuong.\n3. Quang Thong.\n4. Beeline"
+  },
+  {
+    "Id": 39,
+    "Item": "Số lượng bình ắc quy trong tủ rack ắc quy",
+    "Variable": "number_of_batteries_in_battery_rack",
+    "Option": "",
+    "Note": "Số lượng bình ắc quy trong tủ rack ắc quy"
+  },
+  {
+    "Id": 40,
+    "Item": "Trạm có lắp được thêm tủ rack accu outdoor không?",
+    "Variable": "can_station_install_additional_outdoor_battery_rack",
+    "Option": "Yes / No",
+    "Note": "Trạm có lắp được thêm tủ rack accu outdoor không?\n1: Yes\n2: No\n( kích thước cần để lắp  Dài x Rộng = 1.5x1.2 m)"
+  },
+  {
+    "Id": 41,
+    "Item": "Nguyên nhân không lắp được tủ accu outdoor",
+    "Variable": "reason_for_not_installing_outdoor_battery_rack",
+    "Option": "Không có vị trí lắp đặt tủ outdoor / Không đưa được tủ vào vị trí lắp đặt / Trạm có KH hủy hoặc di dời / Trạm dân kiện / Chủ nhà không cho lắp đặt bổ sung / Khác",
+    "Note": "Nguyên nhân không lắp được tủ accu outdoor\n1: Không có vị trí lắp đặt tủ outdoor\n2: Không đưa được tủ vào vị trí lắp đặt\n3: Trạm có KH hủy/di dời\n4: Trạm dân kiện/ Chủ nhà không cho lắp đặt bổ sung\n5: Khác"
+  },
+  {
+    "Id": 42,
+    "Item": "MPĐ đang sử dụng",
+    "Variable": "using_dg",
+    "Option": "Không có / 1 pha / 3 pha",
+    "Note": "MPĐ đang sử dụng\n0: Không có\n1: 1 pha\n2: 3 pha"
+  },
+  {
+    "Id": 43,
+    "Item": "Trạm sử dụng máy nổ",
+    "Variable": "station_uses_dg",
+    "Option": "Diesel / Gasoline",
+    "Note": "Trạm sử dụng máy nổ\n1: Diesel\n2: Gasoline\n(Không có không cần cập nhật)"
+  },
+  {
+    "Id": 44,
+    "Item": "Công suất MPĐ",
+    "Variable": "dg_capacity",
+    "Option": "(Chỉ nhập số, nếu có)",
+    "Note": "Công suất MPĐ\n(Không có không cần cập nhật)"
+  },
+  {
+    "Id": 45,
+    "Item": "Tiết diện dây đang sử dụng cho MPD",
+    "Variable": "current_cable_section_for_dg",
+    "Option": "10mm² / 16mm² / 25mm² / 35mm²",
+    "Note": "Tiết diện dây đang sử dụng cho MPD\n1: 10mm2\n2: 16mm2\n3: 25mm2\n4: 35mm2\n(Không có không cần cập nhật)"
+  },
+  {
+    "Id": 46,
+    "Item": "Kiểu nhà máy nổ đang sử dụng",
+    "Variable": "type_of_dg_used",
+    "Option": "Không có / Bệ bê tông / Nhà lưới B40 / Cabin / Nhà xây / Nhà vượt lũ",
+    "Note": "Kiểu nhà máy nổ đang sử dụng:\n0: Không có\n1: Bệ bê tông\n2: Nhà lưới B40\n3: Cabin\n4: Nhà xây\n5: Nhà vượt lũ"
+  },
+  {
+    "Id": 47,
+    "Item": "Trạm có thể đặt được máy phát điện không?",
+    "Variable": "can_station_install_dg",
+    "Option": "Yes / No",
+    "Note": "Trạm có thể đặt được máy phát điện không?\n1: Yes\n2: No\n(Với trạm chưa có máy nổ)"
+  },
+  {
+    "Id": 48,
+    "Item": "Phương án đi dây",
+    "Variable": "wiring_plan",
+    "Option": "Treo / Ngầm",
+    "Note": "Phương án đi dây\n1: Treo\n2: Ngầm\n(Với trạm có đề xuất lắp thêm máy nổ)"
+  },
+  {
+    "Id": 49,
+    "Item": "Nguyên nhân không lắp được máy phát điện",
+    "Variable": "reason_for_not_installing_dg",
+    "Option": "Nhà máy nổ nhỏ / Không có vị trí đặt máy nổ / Chủ nhà không cho đặt / Trạm có kế hoạch di dời",
+    "Note": "Nguyên nhân không Lắp được máy phát điện\n1: Nhà máy nổ nhỏ\n2: Không có vị trí đặt máy nổ\n3: Chủ nhà không cho đặt\n4: Trạm có kế hoạch di dời"
+  },
+  {
+    "Id": 50,
+    "Item": "Đề xuất xây nhà máy nổ",
+    "Variable": "proposal_to_build_dg_station",
+    "Option": "Không / Nhà máy nổ vượt lũ / Nhà máy nổ lưới B40 / Bệ bê tông",
+    "Note": "Đề xuất xây nhà máy nổ\n1: Không\n2: Nhà máy nổ vượt lũ\n3: Nhà máy nổ lưới B40\n4: Bệ bê tông"
+  },
+  {
+    "Id": 51,
+    "Item": "Độ cao đề xuất nếu xây nhà máy nổ vượt lũ",
+    "Variable": "proposed_height_if_dg_station_to_be_built_above_flood_level",
+    "Option": "(Chỉ nhập số, đơn vị: m)",
+    "Note": "Độ cao đề xuất nếu xây nhà máy nổ vượt lũ\n(m)"
+  },
+  {
+    "Id": 52,
+    "Item": "Trạm cần lắp thêm bồn dầu không?",
+    "Variable": "does_station_need_additional_fuel_tank",
+    "Option": "Yes / No",
+    "Note": "Trạm cần lắp thêm bồn dầu không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 53,
+    "Item": "Có thể vận chuyển MPĐ đến trạm không?",
+    "Variable": "can_dg_be_transported_to_station",
+    "Option": "Yes / No",
+    "Note": "Có thể vận chuyển MPĐ đến trạm không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 54,
+    "Item": "Trạm có ATS không?",
+    "Variable": "station_has_ats",
+    "Option": "Yes / No",
+    "Note": "Trạm có ATS không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 55,
+    "Item": "Loại ATS đang sử dụng",
+    "Variable": "type_of_ats_used",
+    "Option": "1P / 3P",
+    "Note": "Loại ATS đang sử dụng\n1: 1P\n2: 3P"
+  },
+  {
+    "Id": 56,
+    "Item": "Vị trí hiện tại của ATS",
+    "Variable": "current_location_of_ats",
+    "Option": "Indoor / Outdoor",
+    "Note": "Vị trí hiện tại của ATS\n1: Indoor\n2: Outdoor"
+  },
+  {
+    "Id": 57,
+    "Item": "Đề xuất lắp ATS",
+    "Variable": "proposal_to_install_ats",
+    "Option": "Yes / No",
+    "Note": "Đề xuất lắp ATS\n1: Yes\n2: No"
+  },
+  {
+    "Id": 58,
+    "Item": "Loại ATS đề xuất",
+    "Variable": "proposed_ats_type",
+    "Option": "1P / 3P",
+    "Note": "Loại ATS đề xuất\n1: 1P\n2: 3P"
+  },
+  {
+    "Id": 59,
+    "Item": "Khoảng cách đi dây nguồn, dây điều khiển từ ATS-MN",
+    "Variable": "distance_of_power_and_control_wiring_from_ats_mn",
+    "Option": "(Chỉ nhập số, đơn vị: m)",
+    "Note": "Khoảng cách đi dây nguồn,dây điều khiển từ ATS-MN\n(m)"
+  },
+  {
+    "Id": 60,
+    "Item": "Vị trí lắp đặt ATS",
+    "Variable": "ats_installation_location",
+    "Option": "Indoor / Outdoor",
+    "Note": "Vị trí lắp đặt ATS\n1: Indoor\n2: Outdoor"
+  },
+  {
+    "Id": 61,
+    "Item": "Số lượng rack 19\"",
+    "Variable": "number_of_19_inch_racks",
+    "Option": "",
+    "Note": "Số lượng rack 19"
+  },
+  {
+    "Id": 62,
+    "Item": "Có khoảng trống có thể lắp thêm BBU 4G",
+    "Variable": "space_for_additional_4g_bbu_available",
+    "Option": "Yes / No",
+    "Note": "Có khoảng trống có thể lắp thêm BBU 4G\n1: Yes\n2: No"
+  },
+  {
+    "Id": 63,
+    "Item": "Số lượng BBU 4G có thể lắp thêm",
+    "Variable": "additional_4g_bbus_that_can_be_installed",
+    "Option": "",
+    "Note": "Số lượng BBU 4G có thể lắp thêm"
+  },
+  {
+    "Id": 64,
+    "Item": "Có vị trí để lắp thêm rack 19\" không?",
+    "Variable": "space_available_for_additional_19_inch_racks",
+    "Option": "Yes / No",
+    "Note": "Có vị trí để lắp thêm rack 19\" không?\n1: Yes\n2: No\nKích thước để lắp Dài x Rộng x Cao = 0.8 x 0.6 x 2 m\n(Chỉ sử dụng cho trạm nhà xây, container)"
+  },
+  {
+    "Id": 65,
+    "Item": "Số lượng rack 19\" có thể lắp thêm",
+    "Variable": "additional_19_inch_racks_that_can_be_installed",
+    "Option": "",
+    "Note": "Số lượng rack 19\" có thể lắp thêm"
+  },
+  {
+    "Id": 66,
+    "Item": "Nguyên nhân không lắp thêm rack 19\"",
+    "Variable": "reason_for_not_adding_more_19_inch_racks",
+    "Option": "Không có vị trí để lắp / Trạm có KH hủy hoặc di dời / Khác",
+    "Note": "Nguyên nhân không lắp thêm rack 19\"\n1: Không có vị trí để lắp\n2: Trạm có KH hủy/di dời\n3: Khác"
+  },
+  {
+    "Id": 67,
+    "Item": "Số lượng DCDU đang có tại trạm",
+    "Variable": "number_of_dcdus_at_station",
+    "Option": "",
+    "Note": "Số lượng DCDU đang có tại trạm"
+  },
+  {
+    "Id": 68,
+    "Item": "Có vị trí lắp đặt thêm DCDU",
+    "Variable": "space_for_additional_dcdus",
+    "Option": "Yes / No",
+    "Note": "Có vị trí lắp đặt thêm DCDU\n1: Yes\n2: No\n(Kích thước cần trên rack 19'' = 7cm)"
+  },
+  {
+    "Id": 69,
+    "Item": "Số lượng DCDU có thể lắp thêm",
+    "Variable": "additional_dcdus_that_can_be_installed",
+    "Option": "",
+    "Note": "Số lượng DCDU có thể lắp thêm"
+  },
+  {
+    "Id": 70,
+    "Item": "Nguyên nhân không lắp thêm DCDU",
+    "Variable": "reason_for_not_adding_more_dcdus",
+    "Option": "Không có khả năng dồn dịch vị trí để lắp trên Rack 19 / Trạm có KH hủy hoặc di dời / Khác",
+    "Note": "Nguyên nhân không lắp thêm DCDU\n1: Không có khả năng dồn dịch vị trí để lắp trên Rack 19\n2: Trạm có KH hủy/di dời\n3: Khác"
+  },
+  {
+    "Id": 71,
+    "Item": "Trạm RRU có sử dụng tủ nguồn DC mini không?",
+    "Variable": "does_rru_station_use_dc_power_mini_cabinet",
+    "Option": "Yes / No",
+    "Note": "Trạm RRU có sử dụng tủ nguồn DC mini không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 72,
+    "Item": "Nếu trạm RRU sử dụng tủ DC mini có thể lắp được ắc quy không?",
+    "Variable": "can_rru_station_install_batteries_in_dc_mini_cabinet",
+    "Option": "Yes / No",
+    "Note": "Nếu trạm RRU sử dụng tủ DC mini có thể lắp được ắc quy không?\n1: Yes\n2: No"
+  },
+  {
+    "Id": 73,
+    "Item": "Nguyên nhân không lắp được accu trạm RRU",
+    "Variable": "reason_for_not_installing_batteries_in_rru_station",
+    "Option": "Không có vị trí lắp / Trạm chung hạ tầng / Trạm bị mất trộm / Chủ nhà không cho lắp / Trạm có KH hủy hoặc di dời / Khác",
+    "Note": "Nguyên nhân không lắp được accu trạm RRU.\n1: Không có vị trí lắp\n2: Trạm chung hạ tầng\n3: Trạm bị mất trộm\n4: Chủ nhà không cho lắp\n5: Trạm có KH hủy/di dời\n6: Khác"
+  }
+]
