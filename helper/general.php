@@ -1,4 +1,5 @@
 <?php
+
 function saveDataToJson($data, $directory, $fileName)
 {
   // Ensure the directory exists
@@ -35,4 +36,21 @@ function getDataFromJson($filePath)
   }
 
   return ['status' => 'success', 'data' => $data];
+}
+
+function translate($key, $language)
+{
+  if ($language === 'en') {
+    return $key;
+  }
+  // Load the language file
+  $filePath = '../translations/' . $language . '.php';
+  $translations = include $filePath;
+
+  // Check if the key exists in the translations
+  if (array_key_exists($key, $translations)) {
+    return $translations[$key];
+  } else {
+    return $key;
+  }
 }

@@ -1,6 +1,18 @@
 <?php
 session_start();
 
+// Set default language to 'en'
+if (!isset($_SESSION['language'])) {
+    $_SESSION['language'] = 'en';
+}
+
+// Change language if selected
+if (isset($_POST['language'])) {
+    $_SESSION['language'] = $_POST['language'];
+}
+
+$language = $_SESSION['language'];
+
 // Check if the user is logged in; if not, redirect to login
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     echo "<script>alert('You are not logged in! Please log in again.'); window.location.href = 'index.php';</script>";
@@ -17,12 +29,61 @@ $emailJsonPath = "../database/site/{$userEmail}.json";
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
 
+// handle hide fields
+$selectShowField = 'number_of_dc_units';
+$hideFields = [
+    'dc1_unused_cb',
+    'dc1_space_for_additional_cb',
+    'dc1_additional_cb',
+    'dc1_reason_for_not_installing_cb',
+    'dc2_unused_cb',
+    'dc2_space_for_additional_cb',
+    'dc2_additional_cb',
+    'dc2_reason_for_not_installing_cb',
+    'dc3_unused_cb',
+    'dc3_space_for_additional_cb',
+    'dc3_additional_cb',
+    'dc3_reason_for_not_installing_cb',
+];
 // Handle the form submission
 $showForm = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the station name and reference station from the POST data
-    $stationName = $_POST['station_name'];
-    $referenceStation = $_POST['reference_station'];
+    $stationName = isset($_POST['station_name']) ? $_POST['station_name'] : '';
+    $referenceStation = isset($_POST['reference_station']) ? $_POST['reference_station'] : '';
+
+    if ($stationName !== '') {
+
+        // split station name 'BAT00002' to 'BAT'
+        $stationNameFile = substr($stationName, 0, 3);
+        $filePathStation = '../database/template/' . $stationNameFile . '.xlsx';
+        // check filePathStation exists
+        if (!file_exists($filePathStation)) {
+            echo "<script>alert('Station name not found! Please try again.'); window.location.href = 'create_site.php';</script>";
+            exit();
+        }
+        $dataStationName = getDataFormXlsx($filePathStation);
+    
+        // filter by stationName in dataStationName row[1]
+        $dataStationName = array_filter($dataStationName, function ($item) use ($stationName) {
+            return $item[1] == $stationName;
+        });
+    
+        // check if stationName not found
+        if (empty($dataStationName)) {
+            echo "<script>alert('Station name not found! Please try again.'); window.location.href = 'create_site.php';</script>";
+            exit();
+        }
+        // $dataStationName is array so get first element
+        $dataStationName = array_values($dataStationName)[0];
+        $dataStationNameArray = [
+            "branch" => $dataStationName[0],
+            "station_code_7_digits" => $dataStationName[1],
+            "station_code" => $dataStationName[2],
+            "group" => $dataStationName[3],
+            "station_type" => $dataStationName[4],
+        ];
+    }
 
     // Example usage of getDataFromJson
     $filePath = '../database/site/save/' . $stationName . '.json';
@@ -34,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dataSaveInfo = [];
     }
     // Set the flag to show the dynamic form below
-    $showForm = true;
+    $showForm = $stationName !== '' ? true : false;
 }
 ?>
 
@@ -367,7 +428,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="header">
-        <h1>Survey Site</h1>
+        <h1><?= translate('Survey Site', $language) ?></h1>
     </div>
 
     <div class="menu">
@@ -375,22 +436,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="icon">
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
-        <a href="index.php">Home</a>
-        <a href="all_sector.php">Station Managment</a>
-        <a href="create_site.php">Survey Station</a>
-        <a href="logout.php" class="logout">Logout</a>
+        <a href="index.php"><?= translate('Home', $language) ?></a>
+        <a href="all_sector.php"><?= translate('Station Management', $language) ?></a>
+        <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
+        <!-- add select languages -->
+        <!-- add select languages -->
+        <form method="POST" action="">
+            <select class="form-select form-select-sm m-2" name="language" id="language" onchange="this.form.submit()" style="width: 150px;">
+                <option value="en" <?php echo $_SESSION['language'] == 'en' ? 'selected' : ''; ?>><?= translate('English', $language) ?></option>
+                <option value="ca" <?php echo $_SESSION['language'] == 'ca' ? 'selected' : ''; ?>><?= translate('Cambodian', $language) ?></option>
+            </select>
+        </form>
+        <a href="logout.php" class="logout"><?= translate('Logout', $language) ?></a>
     </div>
 
     <div class="container">
         <div class="welcome-message">
-            <p>Welcome, <?php echo $fullName; ?>!</p>
+            <p><?php echo translate('Welcome', $language); ?>, <?php echo $fullName; ?>!</p>
         </div>
 
         <!-- Form to submit station name and reference station -->
-        <form method="POST">
+        <form method="POST" id="form-create">
             <div class="form-group row">
                 <div class="col-md-6">
-                    <label for="station_name">Station Name:</label>
+                    <label for="station_name"><?= translate('Station Name', $language) ?>:</label>
                 </div>
                 <div class="col-md-6">
                     <input type="text" id="station_name" name="station_name" value="<?php echo isset($_POST['station_name']) ? htmlspecialchars($_POST['station_name']) : ''; ?>" required>
@@ -398,7 +467,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group row">
                 <div class="col-md-6">
-                    <label for="reference_station">Reference Station:</label>
+                    <label for="reference_station"><?= translate('Reference Station', $language) ?>:</label>
                 </div>
                 <div class="col-md-6">
                     <input type="text" id="reference_station" name="reference_station" value="<?php echo isset($_POST['reference_station']) ? htmlspecialchars($_POST['reference_station']) : ''; ?>">
@@ -406,7 +475,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group d-flex justify-content-end">
-                <button type="submit" class="btn btn-success">Create</button>
+                <button type="submit" class="btn btn-success"><?= translate('Create', $language) ?></button>
             </div>
         </form>
         <hr>
@@ -415,15 +484,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
 
         if (!empty($dataFormInit) && $showForm) {
-            echo '<form id="form-info">';
+            echo '<form id="form-info" enctype="multipart/form-data">';
 
             $index = 0;
 
             foreach ($dataFormInit as $row) {
+                // check if field is hidden
+                $classHidden = '';
+                $requiredField = 'required';
+                $requiredImgField = 'required';
+                $imageList = [];
+                if (in_array($row['2'], $hideFields)) {
+                    $classHidden = 'd-none';
+                    $requiredField = '';
+                    $requiredImgField = '';
+                }
+                if (isset($dataSaveInfo[$row['2'] . '_img']) && !empty($dataSaveInfo[$row['2'] . '_img'])) {
+                    $requiredImgField = '';
+                    $imageList = $dataSaveInfo[$row['2'] . '_img'];
+                }
+                $classHidden = '';
                 // Generate the field dynamically
-                echo '<div class="form-group row">';
+                echo '<div id="' . $row['2'] . '_row" class="form-group row ' . $classHidden . '">';
                 echo '<div class="col-md-6">
-                        <label tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="focus" data-bs-content="' . $row['0'] . '">' . $row['1'] . ':</label>
+                        <label tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="focus" data-bs-content="' . ($language === 'en' ? $row['0'] : $row['1']) . '">' . ($language === 'en' ? $row['1'] : $row['0']) . ':</label>
                     </div>';
 
                 // Check if the note is not empty before displaying the icon
@@ -438,36 +522,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!empty($row['5'])) {
                     // Split the options by newline
                     $options = explode("\n", $row['5']);
-                    echo '<select class="form-select" id="' . $row['2'] . '" name="' . $row['2'] . '">';
-                    echo '<option value="" disabled selected>Choose</option>'; // Placeholder option
+                    if ($row['2'] == $selectShowField) {
+                        echo '<select class="form-select" id="' . $row['2'] . '" name="' . $row['2'] . '" required onchange="showHideFields(this)">';
+                    } else {
+                        echo '<select class="form-select" id="' . $row['2'] . '" name="' . $row['2'] . '" ' . $requiredField . '>';
+                    }
+                    echo '<option value="" disabled selected>' . translate('Choose', $language) . '</option>'; // Placeholder option
                     foreach ($options as $option) {
                         // Split each option by the colon to get the value and name
                         list($value, $name) = explode(': ', $option);
                         // Check if the option was selected
                         $selected = (isset($dataSaveInfo[$row['2']]) && $dataSaveInfo[$row['2']] == $value) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($value) . '" ' . $selected . '>' . htmlspecialchars($name) . '</option>';
+                        echo '<option value="' . htmlspecialchars($value) . '" ' . $selected . '>' . htmlspecialchars($option) . '</option>';
                     }
                     echo '</select>';
                 } else {
                     $inputType = ($index <= 6) ? 'text' : 'number';
+                    $valueInput = isset($dataSaveInfo[$row['2']]) ? htmlspecialchars($dataSaveInfo[$row['2']]) : (isset($dataStationNameArray[$row['2']]) ? $dataStationNameArray[$row['2']] : '');
+
                     // If there are no options, create a number input
-                    echo '<input class="form-control"  type="' . $inputType . '" id="' . $row['2'] . '" name="' . $row['2'] . '" value="' . (isset($dataSaveInfo[$row['2']]) ? htmlspecialchars($dataSaveInfo[$row['2']]) : '') . '" required>';
+                    echo '<input class="form-control"  type="' . $inputType . '" id="' . $row['2'] . '" name="' . $row['2'] . '" value="' . $valueInput . '" ' . $requiredField . '>';
                 }
                 // render input file
                 if ($row['3'] == '1') {
-                    echo "<input class='form-control d-none' type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='showFileNames(this)'>";
-                    echo "<button type='button' class='btn btn-secondary m-2 d-inline-block col-sm-6 col-lg-4 col-xl-4 col-xxl-4' onclick='document.getElementById(\"" . htmlspecialchars($row['2']) . "_img\").click()'><i class='ph ph-upload-simple'></i> Upload image</button>";
+                    echo "<input class='form-control d-none' type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='showFileNames(this)' " . $requiredImgField . ">";
+                    echo "<button id='" . htmlspecialchars($row['2']) . "_img' type='button' class='btn btn-secondary m-2 d-inline-block col-sm-6 col-lg-4 col-xl-4 col-xxl-4' onclick='document.getElementById(\"" . htmlspecialchars($row['2']) . "_img\").click()'><i class='ph ph-upload-simple'></i> " . translate('Upload image', $language) . "</button>";
                 }
                 echo '</div>';
-                echo "<div id='" . htmlspecialchars($row['2']) . "_img_names' class='row'></div>";
+                echo "<div id='" . htmlspecialchars($row['2']) . "_img_names' class='row'>";
+                foreach ($imageList as $image) {
+                    $index = 1;
+                    echo "<a href=" . $image . " class='col-md-12 text-end' target='_blank'> Image " . $index . "</a>";
+                    $index++;
+                }
+                echo "</div>";
                 echo '</div>';
                 echo '</div>';
                 $index++;
             }
             // Add a submit button
             echo '<div class="form-group mt-3 d-flex justify-content-end gap-2">
-                    <button id="save-info" type="button" class="btn btn-light" onclick="saveInfo()">Save</button>
-                    <button id="submit-info" type="button" class="btn btn-success" onclick="submitInfo()">Submit</button>
+                    <button id="save-info" type="button" class="btn btn-light" onclick="validateForm(\'save\')">' . translate('Save', $language) . '</button>
+                    <button id="submit-info" type="button" class="btn btn-success" onclick="validateForm(\'submit\')">' . translate('Submit', $language) . '</button>
                 </div>';
             echo '</form>';
         }
@@ -475,6 +571,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
+        // JavaScript function to validate the form before saving or submitting
+        function validateForm(action) {
+            var form = document.getElementById('form-info');
+            var fileInputs = document.querySelectorAll('input[type="file"]');
+            var allFilesValid = true;
+
+            fileInputs.forEach(function(fileInput) {
+                if (fileInput.required && fileInput.files.length === 0) {
+                    allFilesValid = false;
+                    fileInput.classList.add('is-invalid');
+                } else {
+                    fileInput.classList.remove('is-invalid');
+                }
+            });
+
+            if (form.checkValidity() && allFilesValid) {
+                if (action === 'save') {
+                    saveInfo();
+                } else if (action === 'submit') {
+                    submitInfo();
+                }
+            } else {
+                if (!allFilesValid) {
+                    alert('Please upload the required files.');
+                }
+                form.reportValidity();
+            }
+        }
         // JavaScript function to toggle the visibility of notes
         function toggleNote(variable) {
             const note = document.getElementById(variable + '-note');
@@ -513,6 +637,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
+                        console.log(data);
                         alert('Data saved successfully!');
                     } else {
                         alert('Failed to save data.');
@@ -556,6 +681,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             for (var i = 0; i < input.files.length; i++) {
                 fileNamesDiv.innerHTML += '<div class="col-md-12 text-end">' + input.files[i].name + '</div>';
             }
+        }
+
+        // show hide fields
+        function showHideFields(select) {
+            var hideFields = [
+                'dc1_unused_cb',
+                'dc1_space_for_additional_cb',
+                'dc1_additional_cb',
+                'dc1_reason_for_not_installing_cb',
+                'dc2_unused_cb',
+                'dc2_space_for_additional_cb',
+                'dc2_additional_cb',
+                'dc2_reason_for_not_installing_cb',
+                'dc3_unused_cb',
+                'dc3_space_for_additional_cb',
+                'dc3_additional_cb',
+                'dc3_reason_for_not_installing_cb',
+            ];
+            const numberRowShow = select.value;
+            for (var i = 1; i <= numberRowShow; i++) {
+                // get fields with start dc1
+                const fields = hideFields.filter(field => field.startsWith('dc' + i));
+                fields.forEach(field => {
+                    document.getElementById(field + '_row').classList.remove('d-none');
+                    // remove field on hideFields
+                    hideFields = hideFields.filter(item => item !== field);
+                });
+            }
+            // hide other fields
+            hideFields.forEach(field => {
+                document.getElementById(field + '_row').classList.add('d-none');
+            });
         }
     </script>
 </body>

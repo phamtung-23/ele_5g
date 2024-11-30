@@ -2,6 +2,9 @@
 /director/vendor/
 /staff/backend/google_api/
 /director/google.json
-/staff/backend/gdcredentials.json
+/staff/backend/site/gdcredentials.json
 /admin/BK1/backend/gdcredentials.json
 /vendor
+/google_api
+/gdcredentials.json
+/library
