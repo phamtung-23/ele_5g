@@ -29,6 +29,13 @@ $emailJsonPath = "../database/site/{$userEmail}.json";
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
 
+$usersData = getDataFromJson('../database/account/users.json');
+echo '<script>';
+echo 'const fullName = ' . json_encode($fullName) . ';';
+echo 'const userEmail = ' . json_encode($userEmail) . ';';
+echo 'const usersData = ' . json_encode($usersData['data']) . ';';
+echo '</script>';
+
 // handle hide fields
 $selectShowField = 'number_of_dc_units';
 $hideFields = [
@@ -45,13 +52,14 @@ $hideFields = [
     'dc3_additional_cb',
     'dc3_reason_for_not_installing_cb',
 ];
-// Handle the form submission
+// Handle the submit form create site
 $showForm = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the station name and reference station from the POST data
     $stationName = isset($_POST['station_name']) ? $_POST['station_name'] : '';
     $referenceStation = isset($_POST['reference_station']) ? $_POST['reference_station'] : '';
 
+    // get data station name
     if ($stationName !== '') {
 
         // split station name 'BAT00002' to 'BAT'
@@ -63,12 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
         $dataStationName = getDataFormXlsx($filePathStation);
-    
+
         // filter by stationName in dataStationName row[1]
         $dataStationName = array_filter($dataStationName, function ($item) use ($stationName) {
             return $item[1] == $stationName;
         });
-    
+
         // check if stationName not found
         if (empty($dataStationName)) {
             echo "<script>alert('Station name not found! Please try again.'); window.location.href = 'create_site.php';</script>";
@@ -85,14 +93,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
     }
 
-    // Example usage of getDataFromJson
-    $filePath = '../database/site/save/' . $stationName . '.json';
+    $dataReferenceStation = [];
+    // get data reference station
+    if ($referenceStation !== '') {
+        $filePathReferenceStation = '../database/site/dataSubmit/' . $referenceStation . '.json';
+        $dataReferenceStation = getDataFromJson($filePathReferenceStation);
+        if ($dataReferenceStation['status'] === 'success') {
+            $dataReferenceStation = $dataReferenceStation['data'];
+        } else {
+            $dataReferenceStation = [];
+        }
+    }
+    // get saved data from stationName.json
+    $filePath = '../database/site/dataSubmit/' . $stationName . '.json';
     $dataResponse = getDataFromJson($filePath);
     if ($dataResponse['status'] === 'success') {
         $dataSaveInfo = $dataResponse['data'];
         // Do something with the data
     } else {
-        $dataSaveInfo = [];
+        $dataSaveInfo = $dataReferenceStation;
     }
     // Set the flag to show the dynamic form below
     $showForm = $stationName !== '' ? true : false;
@@ -424,6 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -503,7 +523,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $requiredImgField = '';
                     $imageList = $dataSaveInfo[$row['2'] . '_img'];
                 }
-                $classHidden = '';
+                // check if hidden field has value then remove hidden class
+                if (isset($dataSaveInfo[$row['2']]) && !empty($dataSaveInfo[$row['2']])) {
+                    $classHidden = '';
+                }
+
+                // // check reference station not same station name then set $imageList = [] and $requiredImgField = 'required'
+                // if ($referenceStation !== '' && $referenceStation !== $stationName) {
+                //     $imageList = [];
+                //     $requiredImgField = 'required';
+                // }
+
+                // $classHidden = '';
                 // Generate the field dynamically
                 echo '<div id="' . $row['2'] . '_row" class="form-group row ' . $classHidden . '">';
                 echo '<div class="col-md-6">
@@ -521,7 +552,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // If there are options, create a select dropdown
                 if (!empty($row['5'])) {
                     // Split the options by newline
-                    $options = explode("\n", $row['5']);
+                    $options = $language === 'en' ? explode("\n", $row['5']) : explode("\n", $row['4']);
                     if ($row['2'] == $selectShowField) {
                         echo '<select class="form-select" id="' . $row['2'] . '" name="' . $row['2'] . '" required onchange="showHideFields(this)">';
                     } else {
@@ -539,6 +570,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } else {
                     $inputType = ($index <= 6) ? 'text' : 'number';
                     $valueInput = isset($dataSaveInfo[$row['2']]) ? htmlspecialchars($dataSaveInfo[$row['2']]) : (isset($dataStationNameArray[$row['2']]) ? $dataStationNameArray[$row['2']] : '');
+                    $valueInput = isset($dataStationNameArray[$row['2']]) ? $dataStationNameArray[$row['2']] : (isset($dataSaveInfo[$row['2']]) ? htmlspecialchars($dataSaveInfo[$row['2']]) : '');
 
                     // If there are no options, create a number input
                     echo '<input class="form-control"  type="' . $inputType . '" id="' . $row['2'] . '" name="' . $row['2'] . '" value="' . $valueInput . '" ' . $requiredField . '>';
@@ -560,8 +592,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo '</div>';
                 $index++;
             }
+            // check data is submitted then disable button
+            if (isset($dataSaveInfo['status']) && $dataSaveInfo['status'] === 'submitted') {
+                $hiddenBtn = 'd-none';
+            } else {
+                $hiddenBtn = '';
+            }
             // Add a submit button
-            echo '<div class="form-group mt-3 d-flex justify-content-end gap-2">
+            echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 '.$hiddenBtn.'">
                     <button id="save-info" type="button" class="btn btn-light" onclick="validateForm(\'save\')">' . translate('Save', $language) . '</button>
                     <button id="submit-info" type="button" class="btn btn-success" onclick="validateForm(\'submit\')">' . translate('Submit', $language) . '</button>
                 </div>';
@@ -625,7 +663,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function saveInfo() {
             var form = document.getElementById('form-info');
             const stationName = document.getElementById('station_name').value;
+            const referenceStation = document.getElementById('reference_station').value;
             var formData = new FormData(form);
+
+            // add email creator to form data
+            formData.append('email', userEmail);
+
+            if (referenceStation !== '') {
+                // Add the reference station to the form data
+                formData.append('reference_station', referenceStation);
+            }
+
+            let timerInterval;
+            Swal.fire({
+                title: "Saving...!",
+                html: "Please wait for a moment.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                // if (result.dismiss === Swal.DismissReason.timer) {
+                //     console.log("I was closed by the timer");
+                // }
+            });
 
             // Add the station name to the form data
             formData.append('station_name', stationName);
@@ -637,13 +702,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        console.log(data);
-                        alert('Data saved successfully!');
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            text: "Data submitted successfully!",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            // alert('Data submitted successfully!');
+                            // reload this page
+                            location.reload();
+                        });
                     } else {
+                        Swal.close();
                         alert('Failed to save data.');
                     }
                 })
                 .catch(error => {
+                    Swal.close();
                     console.error('Error:', error);
                     alert('An error occurred.');
                 });
@@ -652,7 +728,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function submitInfo() {
             var form = document.getElementById('form-info');
             const stationName = document.getElementById('station_name').value;
+            const referenceStation = document.getElementById('reference_station').value;
             var formData = new FormData(form);
+
+            // add email creator to form data
+            formData.append('email', userEmail);
+
+            if (referenceStation !== '') {
+                // Add the reference station to the form data
+                formData.append('reference_station', referenceStation);
+            }
+
+            let timerInterval;
+            Swal.fire({
+                title: "Submitting...!",
+                html: "Please wait for a moment.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                // if (result.dismiss === Swal.DismissReason.timer) {
+                //     console.log("I was closed by the timer");
+                // }
+            });
 
             // Add the station name to the form data
             formData.append('station_name', stationName);
@@ -662,15 +765,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     body: formData
                 })
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
                     if (data.status === 'success') {
-                        alert('Data submitted successfully!');
+                        // Tạo nội dung tin nhắn để gửi cho các user có role là 'bod_pro_gis'
+                        usersData.forEach(async function(user) {
+                            if (user.role === 'bod_pro_gis') {
+                                let telegramMessage = '';
+
+                                telegramMessage = `**New request needs approval!**\n` +
+                                    `Creator: ${fullName} - ${userEmail}\n` +
+                                    `Station Name: ${stationName}\n` +
+                                    `Branch: ${data.data.branch}\n` +
+                                    `Station Code (7 digits): ${data.data.station_code_7_digits}\n` +
+                                    `Station Code: ${data.data.station_code}\n` +
+                                    `Station Type: ${data.data.station_type}\n` +
+                                    `Group: ${data.data.group}\n` +
+                                    `Created At: ${new Date().toLocaleString()}\n`;
+
+
+                                // Gửi tin nhắn đến Telegram
+                                await fetch('../sendTelegram.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        message: telegramMessage,
+                                        id_telegram: user.phone // Truyền thêm thông tin operator_phone
+                                    })
+                                });
+
+
+                            }
+                        });
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            text: "Data submitted successfully!",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            // alert('Data submitted successfully!');
+                            // reload this page
+                            location.reload();
+                        });
                     } else {
+                        Swal.close();
                         alert('Failed to submit data.');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    Swal.close();
                     alert('An error occurred.');
                 });
         };
@@ -705,6 +851,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 const fields = hideFields.filter(field => field.startsWith('dc' + i));
                 fields.forEach(field => {
                     document.getElementById(field + '_row').classList.remove('d-none');
+                    // reset value on showFields
+                    // document.getElementById(field).value = '';
+                    // add attribute required
+                    document.getElementById(field).setAttribute('required', 'required');
                     // remove field on hideFields
                     hideFields = hideFields.filter(item => item !== field);
                 });
@@ -712,6 +862,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // hide other fields
             hideFields.forEach(field => {
                 document.getElementById(field + '_row').classList.add('d-none');
+                // reset value on hideFields
+                document.getElementById(field).value = '';
+                // remove attribute required
+                document.getElementById(field).removeAttribute('required');
             });
         }
     </script>

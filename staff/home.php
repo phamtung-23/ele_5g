@@ -7,9 +7,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     exit();
 }
 
+require_once '../helper/general.php';
+
 $fullName = $_SESSION['full_name'];
 $userEmail = $_SESSION['user_id']; 
-$emailJsonPath = "../database/site/{$userEmail}.json";
+$emailJsonPath = "../database/site/email.json";
 
 // Check if the file exists and load its data
 $data = [];
@@ -17,6 +19,11 @@ if (file_exists($emailJsonPath)) {
     $jsonData = file_get_contents($emailJsonPath);
     $data = json_decode($jsonData, true); // Decode the JSON into an array
 }
+
+echo "<script>";
+echo "let data = " . json_encode($data[$userEmail]) . ";"; // Convert the PHP array to a JavaScript object
+echo "console.log(data);"; // Log the data to the console
+echo "</script>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +33,7 @@ if (file_exists($emailJsonPath)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff's Dashboard</title>
     
-       <style>
+    <style>
         /* Basic styles for layout */
         * {
             margin: 0;
@@ -298,7 +305,7 @@ table td {
     word-wrap: break-word; /* Make text wrap instead of overflow */
     overflow-wrap: break-word; /* Make sure long words break to fit in cells */
     min-width: 45px; /* Set minimum width for the first few columns */
-}0
+}
 
 /* Add specific column width adjustments for columns 2, 3, and 4 (PRO, BAT, Sector) */
 table td:nth-child(2),
@@ -373,8 +380,9 @@ table th:nth-child(n+31):nth-child(-n+38) {
                         <th>No</th>
                         <th>Province</th>
                         <th>Site</th>
-                        <th>Sector</th>
+                        <th>Status</th>
                         <th>Update time</th>
+                        <th>Pending approve level</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -382,18 +390,39 @@ table th:nth-child(n+31):nth-child(-n+38) {
                     <?php if (!empty($data)): ?>
                         <?php 
                         $no = 1; // Initialize the counter variable for No
-                        foreach ($data as $key => $item): 
+                        foreach ($data[$userEmail] as $key => $value): 
+                            foreach ($value['list'] as $item):
+                                $res = getDataByStationName($item);
+                                if ($res['status'] === 'success') {
+                                    $stationData = $res['data'];
+                                } else {
+                                    $stationData = [];
+                                }
+
+                                if (!empty($stationData)) {
+                                    $approvalStatus = getApprovalStatus($stationData['approval']);
+                                } else {
+                                    $approvalStatus = [];
+                                }
+
                         ?>
                             <tr>
                                 <td><?php echo $no++; ?></td> <!-- Incremented value for "No" -->
-                                <td><?php echo htmlspecialchars($item['province']); ?></td>
-                                <td><?php echo htmlspecialchars($item['site']); ?></td>
-                                <td><?php echo htmlspecialchars($item['number_of_sector']); ?></td>
-                                <td><?php echo htmlspecialchars($item['time_create']); ?></td>
+                                <td><?php echo htmlspecialchars($key ); ?></td>
+                                <td><?php echo htmlspecialchars($item); ?></td>
+                                <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']); ?></td>
+                                <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']); ?></td>
+                                <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['role']); ?></td>
                                 <td>
-                                    <button class="action-button" onclick="updateRecord(<?php echo $key; ?>)">Update</button>
+                                    <?php 
+                                        $status = empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']);
+                                        if ($status !== 'Approved') {
+                                            echo '<button class="action-button" onclick="updateRecord(\'' . $item . '\')">Update</button>';
+                                        }
+                                    ?>
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr><td colspan="6">No data found</td></tr>
@@ -402,8 +431,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
             </table>
         </div>
     </div>
-
-    <script>
+     <script>
         // Initialize DataTable with search, pagination, and other features
         $(document).ready(function() {
             $('#dataTable').DataTable({
@@ -416,11 +444,9 @@ table th:nth-child(n+31):nth-child(-n+38) {
 
         // Update functionality (for example, open a modal to update the record)
         function updateRecord(id) {
-            alert("Update record with ID: " + id);
-            // You can redirect to the update page or show a modal to edit the record
+            // redirect to the update page
+            window.location.href = 'update_site.php?station_name=' + id;
         }
-    </script>
-     <script>
         // Toggle the responsive class to show/hide the menu
         function toggleMenu() {
             var menu = document.querySelector('.menu');

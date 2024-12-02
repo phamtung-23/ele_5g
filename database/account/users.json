@@ -3,8 +3,29 @@
         "fullname": "STAFF 1",
         "email": "staff@gmail.com",
         "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
-        "phone": "11111",
+        "phone": "6944007336",
         "role": "staff"
+    },
+    {
+        "fullname": "bod pro gis",
+        "email": "bod_pro_gis@gmail.com",
+        "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
+        "phone": "6944007336",
+        "role": "bod_pro_gis"
+    },
+    {
+        "fullname": "office gis",
+        "email": "office_gis@gmail.com",
+        "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
+        "phone": "11111",
+        "role": "office_gis"
+    },
+    {
+        "fullname": "office vtc",
+        "email": "office_vtc@gmail.com",
+        "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
+        "phone": "11111",
+        "role": "office_vtc"
     },
     {
         "fullname": "ADMIN",

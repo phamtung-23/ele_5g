@@ -1,0 +1,34 @@
+{
+    "staff@gmail.com": {
+        "CHA": {
+            "number": 2,
+            "list": [
+                "CHA0001",
+                "CHA0002"
+            ]
+        },
+        "BAT": {
+            "number": 2,
+            "list": [
+                "BAT0002",
+                "BAT0003"
+            ]
+        }
+    },
+    "staff1@gmail.com": {
+        "CHA": {
+            "number": 3,
+            "list": [
+                "CHA0003",
+                "CHA0004",
+                "CHA0005"
+            ]
+        },
+        "BAT": {
+            "number": 1,
+            "list": [
+                "BAT0004"
+            ]
+        }
+    }
+}

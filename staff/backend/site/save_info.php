@@ -33,24 +33,37 @@ function uploadFileToGoogleDrive($filePath, $fileName, $folderId)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $data = [];
+  // get reference station name
+  $referenceStationName = isset($_POST['reference_station']) ? $_POST['reference_station'] : null;
+
+  // get data from post request
   foreach ($_POST as $key => $value) {
     $data[$key] = htmlspecialchars($value);
   }
 
   if (isset($data['station_name'])) {
     $stationName = $data['station_name'];
-    $directory = '../../../database/site/save';
+    $directory = '../../../database/site/dataSubmit';
 
-    // read data from json file
+    // get reference data by reference station name
+    $filePathDataReference = $directory . '/' . $referenceStationName . '.json';
+    $res = getDataFromJson($filePathDataReference);
+    if ($res['status'] === 'success') {
+      $dataReference = $res['data'];
+    } else {
+      $dataReference = [];
+    }
+
+    // get previous data by station name, if not exist then set reference data if it exits
     $filePathDataPrevious = $directory . '/' . $stationName . '.json';
     $res = getDataFromJson($filePathDataPrevious);
     if ($res['status'] === 'success') {
       $dataPrevious = $res['data'];
     } else {
-      $dataPrevious = [];
+      $dataPrevious = $dataReference;
     }
     
-    // Handle file uploads
+    // Handle file uploads and save to Google Drive
     if (!empty($_FILES)) {
       foreach ($_FILES as $fileKey => $fileArray) {
         $uploadDir = $stationName . '_files/';
@@ -76,11 +89,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         // check $data[$fileKey] is empty or not, if empty then set previous data
         if (empty($data[$fileKey])) {
-          $data[$fileKey] = $dataPrevious[$fileKey];
+          // check previous data is empty or not
+          if (!empty($dataPrevious)) {
+            if (isset($dataPrevious[$fileKey])) {
+              $data[$fileKey] = $dataPrevious[$fileKey];
+            } 
+          }
         }
         rmdir($uploadDir);
       }
     }
+
+    $data['created_at'] = date('Y-m-d H:i:s');
+    $data['updated_at'] = date('Y-m-d H:i:s');
+    $data['status'] = 'updated';
 
 
     $response = saveDataToJson($data, $directory, $stationName);
