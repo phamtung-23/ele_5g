@@ -360,7 +360,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
           <a href="index.php">Home</a>
-         <a href="all_sector.php">Station Managment</a>
+         <a href="all_site.php">Station Managment</a>
         <a href="create_site.php">Survey Station</a>
         <a href="logout.php" class="logout">Logout</a>
     </div>
@@ -405,19 +405,25 @@ table th:nth-child(n+31):nth-child(-n+38) {
                                     $approvalStatus = [];
                                 }
 
+                                $status = empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']);
+
+                                $colors = [ 'Pending' => '#FF8C00', 'Rejected' => 'red', 'Approved' => 'green', '' => 'black' ];
+                                $colorText = $colors[$status];
+
                         ?>
                             <tr>
                                 <td><?php echo $no++; ?></td> <!-- Incremented value for "No" -->
                                 <td><?php echo htmlspecialchars($key ); ?></td>
                                 <td><?php echo htmlspecialchars($item); ?></td>
-                                <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']); ?></td>
+                                <td style="color: <?=$colorText?>;"><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']); ?></td>
                                 <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']); ?></td>
                                 <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['role']); ?></td>
-                                <td>
+                                <td style="display: flex; justify-content: center;">
                                     <?php 
-                                        $status = empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']);
-                                        if ($status !== 'Approved') {
-                                            echo '<button class="action-button" onclick="updateRecord(\'' . $item . '\')">Update</button>';
+                                        if ($status === 'Rejected') {
+                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">Update</button>';
+                                        } else {
+                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">Detail</button>';
                                         }
                                     ?>
                                 </td>

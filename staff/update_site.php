@@ -579,20 +579,40 @@ if ($dataResponse['status'] === 'success') {
                 echo '</div>';
                 $index++;
             }
-            // check data is submitted then disable button
-            if (isset($dataSaveInfo['status']) && $dataSaveInfo['status'] === 'submitted') {
-                $hiddenBtn = 'd-none';
-            } else {
+            // get approval status by user role
+            $approvalStatus = getApprovalStatus($dataSaveInfo['approval']);
+            // check if approval status is pending then show button save and submit
+            if ($approvalStatus['status'] === 'Rejected') {
                 $hiddenBtn = '';
+            } else {
+                $hiddenBtn = 'd-none';
             }
             // Add a submit button
-            // echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 ' . $hiddenBtn . '">
-            //         <button id="save-info" type="button" class="btn btn-light" onclick="validateForm(\'save\')">' . translate('Save', $language) . '</button>
-            //         <button id="submit-info" type="button" class="btn btn-success" onclick="validateForm(\'submit\')">' . translate('Submit', $language) . '</button>
-            //     </div>';
-            // echo '</form>';
+            echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 ' . $hiddenBtn . '">
+                    <button id="submit-info" type="button" class="btn btn-success" onclick="validateForm(\'submit\')">' . translate('Update', $language) . '</button>
+                </div>';
+            echo '</form>';
         }
         ?>
+
+        <!-- Modal submit -->
+        <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel">Confirm Update</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to update this station?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="validateForm('submit')">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

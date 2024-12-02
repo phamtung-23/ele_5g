@@ -140,6 +140,8 @@ function getDataByStationName($stationName)
   return ['status' => 'success', 'data' => $data];
 }
 
+
+
 function getApprovalStatus($approval)
 {
   $levelName = [
@@ -148,14 +150,61 @@ function getApprovalStatus($approval)
     'office_vtc' => 'Head ELE VTC',
   ];
   // Check the approval status
+  $updateTime = '';
   foreach ($approval as $item) {
+    // check if update time is valid
+    if ($item['updateTime'] !== '') {
+      $updateTime = $item['updateTime'];
+    }
     if ($item['status'] === 'rejected') {
-      return ['status' => 'Rejected', 'role' => $levelName[$item['role']], 'updateTime' => $item['updateTime']];
+      return ['status' => 'Rejected', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
     }
     if ($item['status'] === 'pending') {
-      return ['status' => 'Pending', 'role' => $levelName[$item['role']], 'updateTime' => $item['updateTime']];
+      return ['status' => 'Pending', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
     }
   }
 
-  return ['status' => 'Approved', 'role' => $levelName[$item['role']], 'updateTime' => $item['updateTime']];
+  return ['status' => 'Approved', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
 }
+
+// get the approval status by role
+function getApprovalStatusByRole($approval, $role)
+{
+  $levelName = [
+    'bod_pro_gis' => 'BoD GIS Province',
+    'office_gis' => 'Head ELE GIS',
+    'office_vtc' => 'Head ELE VTC',
+  ];
+  // Check the approval status
+  foreach ($approval as $item) {
+    if ($item['role'] === $role) {
+      return ['status' => $item['status'], 'role' => $levelName[$item['role']], 'updateTime' => $item['updateTime']];
+    }
+  }
+}
+
+// get information of the user by email
+function getUserInfo($email)
+{
+  $directory = '../database/account';
+  $filePath = $directory . '/user.json';
+
+  // check if the file exists
+  if (!file_exists($filePath)) {
+    return ['status' => 'fail', 'message' => 'File not found'];
+  }
+
+  // read the file content
+  $jsonContent = file_get_contents($filePath);
+
+  // decode the JSON data
+  $data = json_decode($jsonContent, true);
+
+  // check for JSON decoding errors
+  if (json_last_error() !== JSON_ERROR_NONE) {
+    return ['status' => 'fail', 'message' => 'Error decoding JSON'];
+  }
+
+  return ['status' => 'success', 'data' => $data];
+}
+

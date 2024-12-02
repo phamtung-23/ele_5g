@@ -140,23 +140,23 @@
     "approval": [
         {
             "role": "bod_pro_gis",
-            "email": "",
-            "status": "pending",
-            "updateTime": "2024-12-01 05:37:43",
+            "email": "bod_pro_gis@gmail.com",
+            "status": "approved",
+            "updateTime": "2024-12-02 18:42:04",
             "comment": ""
         },
         {
             "role": "office_gis",
-            "email": "",
-            "status": "pending",
-            "updateTime": "2024-12-01 05:37:43",
+            "email": "office_gis@gmail.com",
+            "status": "approved",
+            "updateTime": "2024-12-02 18:59:35",
             "comment": ""
         },
         {
             "role": "office_vtc",
-            "email": "",
-            "status": "pending",
-            "updateTime": "2024-12-01 05:37:43",
+            "email": "office_vtc@gmail.com",
+            "status": "approved",
+            "updateTime": "2024-12-02 19:09:23",
             "comment": ""
         }
     ]
