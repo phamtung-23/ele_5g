@@ -187,7 +187,7 @@ function getApprovalStatusByRole($approval, $role)
 function getUserInfo($email)
 {
   $directory = '../database/account';
-  $filePath = $directory . '/user.json';
+  $filePath = $directory . '/users.json';
 
   // check if the file exists
   if (!file_exists($filePath)) {
@@ -205,6 +205,11 @@ function getUserInfo($email)
     return ['status' => 'fail', 'message' => 'Error decoding JSON'];
   }
 
-  return ['status' => 'success', 'data' => $data];
+  // find the user by email
+  foreach ($data as $item) {
+    if ($item['email'] === $email) {
+      return ['status' => 'success', 'data' => $item];
+    }
+  }
 }
 

@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_staff");
 session_start();
 
 // Set default language to 'en'
@@ -26,6 +27,15 @@ $fullName = $_SESSION['full_name'];
 $userEmail = $_SESSION['user_id'];
 $emailJsonPath = "../database/site/{$userEmail}.json";
 
+$infoCurrentUserRes = getUserInfo($userEmail);
+if ($infoCurrentUserRes['status'] === 'success') {
+    $infoCurrentUser = $infoCurrentUserRes['data'];
+} else {
+    echo "<script>alert('Failed to get user information! Please try again.'); window.location.href = 'index.php';</script>";
+    exit();
+}
+$currentProvince = $infoCurrentUser['province'];
+
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
 
@@ -34,6 +44,7 @@ echo '<script>';
 echo 'const fullName = ' . json_encode($fullName) . ';';
 echo 'const userEmail = ' . json_encode($userEmail) . ';';
 echo 'const usersData = ' . json_encode($usersData['data']) . ';';
+echo 'const currentProvince = ' . json_encode($currentProvince) . ';';
 echo '</script>';
 
 // handle hide fields
@@ -769,7 +780,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if (data.status === 'success') {
                         // Tạo nội dung tin nhắn để gửi cho các user có role là 'bod_pro_gis'
                         usersData.forEach(async function(user) {
-                            if (user.role === 'bod_pro_gis') {
+                            if (user.role === 'bod_pro_gis' && user.province === currentProvince) {
                                 let telegramMessage = '';
 
                                 telegramMessage = `**New request needs approval!**\n` +
@@ -791,7 +802,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     },
                                     body: JSON.stringify({
                                         message: telegramMessage,
-                                        id_telegram: user.phone // Truyền thêm thông tin operator_phone
+                                        id_telegram: user.idtele
                                     })
                                 });
 

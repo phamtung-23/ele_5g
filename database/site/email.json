@@ -14,21 +14,5 @@
                 "BAT0003"
             ]
         }
-    },
-    "staff1@gmail.com": {
-        "CHA": {
-            "number": 3,
-            "list": [
-                "CHA0003",
-                "CHA0004",
-                "CHA0005"
-            ]
-        },
-        "BAT": {
-            "number": 1,
-            "list": [
-                "BAT0004"
-            ]
-        }
     }
 }

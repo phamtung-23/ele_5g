@@ -79,10 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($fileArray['name'] as $index => $fileName) {
           $fileTmpName = $fileArray['tmp_name'][$index];
           $filePath = $uploadDir . basename($fileName);
-          $folderId = '1702MmGw3Y5C1WKveLqxqhNUzBTD6e19C';
+          $folderId = '1Hb0ikxBxcjKKOHwbN09B-zpjLFal-Ch7';
 
           if (move_uploaded_file($fileTmpName, $filePath)) {
-            $linkImg = uploadFileToGoogleDrive($filePath, $fileName, $folderId);
+            // get file name = stationName + fileKey + index + fileName
+            $fileNameGGDrive = $stationName . '_' . $fileKey . '_' . $index . '_' . $fileName;
+            $linkImg = uploadFileToGoogleDrive($filePath, $fileNameGGDrive, $folderId);
             if ($linkImg) {
               $data[$fileKey][] = $linkImg;
               unlink($filePath);

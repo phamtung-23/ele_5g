@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_staff");
 session_start();
 
 // Check if the user is logged in; if not, redirect to login

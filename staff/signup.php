@@ -7,6 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirm_password = $_POST['re_pass'];
     $phone = $_POST['phone'];
     $role = $_POST['role'];
+    $idtele = $_POST['idtele'];
+    $province = $_POST['province'];
 
     // Check if the confirmation password matches
     if ($password === $confirm_password) {
@@ -38,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'email' => $email,
             'password' => $hashed_password,
             'phone' => $phone,
+            'idtele' => $idtele,
+            'province' => $province,
             'role' => $role
         ];
         $users[] = $newUser;

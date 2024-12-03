@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_office_gis");
 session_start();
 
 // Check if the user is logged in; if not, redirect to login
@@ -31,7 +32,7 @@ echo "</script>";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff's Dashboard</title>
+    <title>Head ELE GIS's Dashboard</title>
     
     <style>
         /* Basic styles for layout */
@@ -351,7 +352,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
 <body>
 
     <div class="header">
-        <h1>Staff's Dashboard</h1>
+        <h1>Head ELE GIS's Dashboard</h1>
     </div>
 
     <div class="menu">

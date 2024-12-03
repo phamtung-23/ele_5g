@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_office_vtc");
 session_start();
 
 // Set default language to 'en'
@@ -79,7 +80,7 @@ if ($dataResponse['status'] === 'success') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff's Dashboard</title>
+    <title>Head ELE VTC's Dashboard</title>
 
     <style>
         /* Basic styles for layout */
@@ -697,7 +698,7 @@ if ($dataResponse['status'] === 'success') {
                         },
                         body: JSON.stringify({
                             message: telegramMessage,
-                            id_telegram: staffInfo.phone // Truyền thêm thông tin operator_phone
+                            id_telegram: staffInfo.idtele // Truyền thêm thông tin operator_phone
                         })
                     });
                     if (data.status === 'success') {
@@ -772,7 +773,7 @@ if ($dataResponse['status'] === 'success') {
                             },
                             body: JSON.stringify({
                                 message: telegramMessage,
-                                id_telegram: staffInfo.phone // Truyền thêm thông tin operator_phone
+                                id_telegram: staffInfo.idtele // Truyền thêm thông tin operator_phone
                             })
                         });
                         // add alert success

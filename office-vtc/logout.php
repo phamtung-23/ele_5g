@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_office_vtc");
 session_start();
 
 // Clear all sessions

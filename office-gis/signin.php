@@ -1,4 +1,5 @@
 <?php
+session_name("ele_5g_office_gis");
 session_start();
 
 // Set the session lifetime to 1 hour (3600 seconds)
