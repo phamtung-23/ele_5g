@@ -36,6 +36,21 @@ if ($infoCurrentUserRes['status'] === 'success') {
 }
 $currentProvince = $infoCurrentUser['province'];
 
+// check if the user have not a group
+if (!isset($infoCurrentUser['group']) || $infoCurrentUser['group'] === '') {
+    echo "<script>alert('You have not been assigned to any group! Please contact the administrator.'); window.location.href = 'index.php';</script>";
+    exit();
+}
+// get list station name by group
+$filePathGroup = "../database/template/teams.xlsx";
+$groupData = getDataFormXlsx($filePathGroup);
+$listStationName = [];
+foreach ($groupData as $row) {
+    if ($row[3] === $infoCurrentUser['group']) {
+        $listStationName[] = $row[2];
+    }
+}
+
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
 
@@ -492,9 +507,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="col-md-6">
                     <label for="station_name"><?= translate('Station Name', $language) ?>:</label>
                 </div>
+                <!-- add select with option is list station name -->
                 <div class="col-md-6">
-                    <input type="text" id="station_name" name="station_name" value="<?php echo isset($_POST['station_name']) ? htmlspecialchars($_POST['station_name']) : ''; ?>" required>
+                    <select class="form-select" id="station_name" name="station_name" required>
+                        <option value="" disabled selected><?= translate('Choose', $language) ?></option>
+                        <?php
+                        foreach ($listStationName as $station) {
+                            if ($station == $stationName) {
+                                echo '<option value="' . $station . '" selected>' . $station . '</option>';
+                            } else {
+                                echo '<option value="' . $station . '">' . $station . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
+                <!-- <div class="col-md-6">
+                    <input type="text" id="station_name" name="station_name" value="" required>
+                </div> -->
             </div>
             <div class="form-group row">
                 <div class="col-md-6">

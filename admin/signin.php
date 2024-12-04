@@ -1,5 +1,5 @@
 <?php
-session_name("ele_5g_bod_gis");
+session_name("ele_5g_admin");
 session_start();
 
 // Set the session lifetime to 1 hour (3600 seconds)
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['login_time'] = time();
 
                 // Redirect based on the user role
-                if ($user['role'] == 'bod_pro_gis') {
+                if ($user['role'] == 'admin') {
                     header("Location: home.php");
                 }
                 exit();

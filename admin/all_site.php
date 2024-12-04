@@ -1,9 +1,9 @@
 <?php
-session_name("ele_5g_bod_gis");
+session_name("ele_5g_admin");
 session_start();
 
 // Check if the user is logged in; if not, redirect to login
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'bod_pro_gis') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo "<script>alert('You are not logged in! Please log in again.'); window.location.href = 'index.php';</script>";
     exit();
 }

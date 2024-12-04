@@ -30,6 +30,15 @@ $fullName = $_SESSION['full_name'];
 $userEmail = $_SESSION['user_id'];
 $emailJsonPath = "../database/site/{$userEmail}.json";
 
+$infoCurrentUserRes = getUserInfo($userEmail);
+if ($infoCurrentUserRes['status'] === 'success') {
+    $infoCurrentUser = $infoCurrentUserRes['data'];
+} else {
+    echo "<script>alert('Failed to get user information! Please try again.'); window.location.href = 'index.php';</script>";
+    exit();
+}
+$currentProvince = $infoCurrentUser['province'];
+
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
 
@@ -38,6 +47,7 @@ echo '<script>';
 echo 'const fullName = ' . json_encode($fullName) . ';';
 echo 'const userEmail = ' . json_encode($userEmail) . ';';
 echo 'const usersData = ' . json_encode($usersData['data']) . ';';
+echo 'const currentProvince = ' . json_encode($currentProvince) . ';';
 echo '</script>';
 
 // handle hide fields
@@ -775,6 +785,38 @@ if ($dataResponse['status'] === 'success') {
                                 message: telegramMessage,
                                 id_telegram: staffInfo.idtele // Truyền thêm thông tin operator_phone
                             })
+                        });
+
+                        // Tạo nội dung tin nhắn để gửi cho các user có role là 'bod_pro_gis'
+                        usersData.forEach(async function(user) {
+                            if (user.role === 'office_vtc' && user.province === currentProvince) {
+                                let telegramMessage = '';
+
+                                telegramMessage = `**New request needs approval!**\n` +
+                                    `Creator: ${staffInfo.fullname} - ${staffInfo.email}\n` +
+                                    `Station Name: ${document.getElementById('station_name').value}\n` +
+                                    `Branch: ${data.data.branch}\n` +
+                                    `Station Code (7 digits): ${data.data.station_code_7_digits}\n` +
+                                    `Station Code: ${data.data.station_code}\n` +
+                                    `Station Type: ${data.data.station_type}\n` +
+                                    `Group: ${data.data.group}\n` +
+                                    `Approve by Head ELE GIS: <?php echo $fullName . ' - ' . $userEmail ?>\n` +
+                                    `Update At: ${new Date().toLocaleString()}\n`;
+
+                                // Gửi tin nhắn đến Telegram
+                                await fetch('../sendTelegram.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        message: telegramMessage,
+                                        id_telegram: user.idtele
+                                    })
+                                });
+
+
+                            }
                         });
                         // add alert success
                         Swal.fire({

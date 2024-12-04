@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Add the new user to the array
         $newUser = [
+            'id' => uniqid(),
             'fullname' => $fullname,
             'email' => $email,
             'password' => $hashed_password,

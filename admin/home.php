@@ -1,9 +1,9 @@
 <?php
-session_name("ele_5g_bod_gis");
+session_name("ele_5g_admin");
 session_start();
 
 // Check if the user is logged in; if not, redirect to login
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'bod_pro_gis') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo "<script>alert('You are not logged in! Please log in again.'); window.location.href = 'index.php';</script>";
     exit();
 }
@@ -12,7 +12,7 @@ require_once '../helper/general.php';
 
 $fullName = $_SESSION['full_name'];
 $userEmail = $_SESSION['user_id']; 
-$emailJsonPath = "../database/site/email.json";
+$emailJsonPath = "../database/account/users.json";
 
 // get the information of the current user by email
 $currentUserInfoRes = getUserInfo($userEmail);
@@ -41,7 +41,7 @@ echo "</script>";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoD GIS Province's Dashboard</title>
+    <title>Admin's Dashboard</title>
     
     <style>
         /* Basic styles for layout */
@@ -361,7 +361,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
 <body>
 
     <div class="header">
-        <h1>BoD GIS Province's Dashboard</h1>
+        <h1>Admin's Dashboard</h1>
     </div>
 
     <div class="menu">
@@ -370,7 +370,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
           <a href="index.php">Home</a>
-         <a href="all_site.php">Station Management</a>
+         <a href="all_site.php">Group Management</a>
         <!-- <a href="create_site.php">Survey Station</a> -->
         <a href="logout.php" class="logout">Logout</a>
     </div>
@@ -385,16 +385,16 @@ table th:nth-child(n+31):nth-child(-n+38) {
             
             <!-- Data Table -->
             <table id="dataTable">
-                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">Pending Approval List</caption>
+                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">User Management</caption>
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Full Name</th>
                         <th>Email</th>
                         <th>Province</th>
-                        <th>Site</th>
+                        <th>Role</th>
                         <th>Status</th>
-                        <th>Update time</th>
-                        <th>Pending approve level</th>
+                        <th>Group</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -402,69 +402,43 @@ table th:nth-child(n+31):nth-child(-n+38) {
                     <?php if (!empty($data)): ?>
                         <?php 
                         $no = 1; // Initialize the counter variable for No
-                        foreach ($data as $key => $value): 
-                            // Get the user information by email
-                            $itemEmail = $key;
-                            $emailInfoRes = getUserInfo($itemEmail);
-                            if ($emailInfoRes['status'] === 'success') {
-                                $emailInfo = $emailInfoRes['data'];
-                            } else {
-                                $emailInfo = [];
-                            }
-                            $emailProvince = $emailInfo['province'];
-                            // check if the user email not equals to the current user email then skip
-                            if ($emailProvince !== $currentProvince) {
-                                continue;
+                        foreach ($data as $userInfo):
+                            $fullName = $userInfo['fullname'];
+                            $itemEmail = $userInfo['email'];
+                            $itemProvince = $userInfo['province'];
+                            $itemRole = $userInfo['role'];
+                            $itemGroup = isset($userInfo['group']) ? $userInfo['group'] : '';
+
+                            $itemStatus = 'Active';
+                            if ($userInfo['role'] === 'staff') {
+                                $itemStatus = isset($userInfo['group']) && $userInfo['group'] !== '' ? 'Active' : 'Pending';
                             }
 
-                            // if the user email equals to the current user email then continue
-                            foreach ($value as $itemKey => $itemValue):
-                                $stationType = $itemKey;
-                                $stationNumber = $itemValue['number'];
-                                $stationList = $itemValue['list'];
-                                $stationData = [];
-                                $approvalStatus = [];
-                                foreach ($stationList as $stationId):
-                                    $res = getDataByStationName($stationId);
-                                    if ($res['status'] === 'success') {
-                                        $stationData = $res['data'];
-                                    } else {
-                                        $stationData = [];
-                                    }
-
-                                    if (!empty($stationData)) {
-                                        $approvalStatus = getApprovalStatusByRole($stationData['approval'], $_SESSION['role']);
-                                    } else {
-                                        $approvalStatus = [];
-                                    }
-
-                                    $status = empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']);
-
-                                    if ($status !== 'pending') {
-                                        continue;
-                                    }
-
-                                    $colors = [ 'pending' => '#FF8C00', 'rejected' => 'red', 'approved' => 'green', '' => 'black' ];
-                                    $colorText = $colors[$status];
+                            $colorText = $itemStatus === 'Active' ? 'green' : '#FF8C00';
+                            
                         ?>
                                 <tr>
                                     <td><?php echo $no++; ?></td> <!-- Incremented value for "No" -->
-                                    <td><?php echo $itemEmail ?></td>
-                                    <td><?php echo htmlspecialchars($stationType ); ?></td>
-                                    <td><?php echo htmlspecialchars($stationId); ?></td>
-                                    <td style="color: <?=$colorText?>;"><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']); ?></td>
-                                    <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']); ?></td>
-                                    <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['role']); ?></td>
-                                    <td style="display: flex; justify-content: center;">
+                                    <td><?=$fullName ?></td>
+                                    <td><?=$itemEmail ?></td>
+                                    <td><?=$itemProvince; ?></td>
+                                    <td><?=$itemRole ?></td>
+                                    <td style="color: <?=$colorText?>;"><?=$itemStatus ?></td>
+                                    <td><?=$itemGroup ?></td>
+                                    
                                         <?php 
-                                            if ($status !== 'Approved') {
-                                                echo '<button class="action-button" style="padding: 5px;" onclick="handleViewDetail(\'' . $stationId . '\')">Detail</button>';
+                                            if ($itemStatus !== 'Active') {
+                                                echo '<td style="display: flex; justify-content: center;">
+                                                        <button class="action-button" style="padding: 5px;" onclick="handleViewDetail(\'' . $userInfo['id'] . '\')">Add group</button>
+                                                    </td>';
+                                            }else{
+                                                echo '<td style="display: flex; justify-content: center;">
+                                                        <button class="action-button" style="padding: 5px;" onclick="handleViewDetail(\'' . $userInfo['id'] . '\')">Detail</button>
+                                                    </td>';
                                             }
                                         ?>
-                                    </td>
+                                    
                                 </tr>
-                                <?php endforeach; ?>
-                            <?php endforeach; ?>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr><td colspan="6">No data found</td></tr>
@@ -487,7 +461,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
         // Update functionality (for example, open a modal to update the record)
         function handleViewDetail(id) {
             // redirect to the update page
-            window.location.href = 'update_site.php?station_name=' + id;
+            window.location.href = 'add_group.php?user_id=' + id;
         }
         // Toggle the responsive class to show/hide the menu
         function toggleMenu() {

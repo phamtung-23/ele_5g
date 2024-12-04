@@ -1,14 +1,17 @@
 [
     {
+        "id": "6750692db86fd",
         "fullname": "STAFF 1",
         "email": "staff@gmail.com",
         "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
         "phone": "0359663439",
         "idtele": "6944007336",
         "province": "CHH",
-        "role": "staff"
+        "role": "staff",
+        "group": "CHH_T2"
     },
     {
+        "id": "6750691ea0c40",
         "fullname": "bod pro gis",
         "email": "bod_pro_gis@gmail.com",
         "password": "$2y$10$QbnD\/H\/63uWvvndSsSzP7.I2cIsApkWZMuOEAt8oNHo3zLfOBNGK6",
@@ -18,6 +21,7 @@
         "role": "bod_pro_gis"
     },
     {
+        "id": "675069107fcaf",
         "fullname": "office gis",
         "email": "office_gis@gmail.com",
         "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
@@ -27,6 +31,7 @@
         "role": "office_gis"
     },
     {
+        "id": "675068ea4a97b",
         "fullname": "office vtc",
         "email": "office_vtc@gmail.com",
         "password": "$2y$10$wKOQw9YMSqSWETf9Zc\/aZOZUaPcjVUqDbEnaJL3.DOIdhNF9iCNgG",
@@ -36,6 +41,7 @@
         "role": "office_vtc"
     },
     {
+        "id": "6750698abed8d",
         "fullname": "ADMIN",
         "email": "admin@gmail.com",
         "password": "$2y$10$zbDQQdO8EDuDUgzdsTuZ8OWu32w06Ky1rrnnXBdG40.Z3I7p9WDyO",

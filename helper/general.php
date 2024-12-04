@@ -213,3 +213,66 @@ function getUserInfo($email)
   }
 }
 
+// get information of the user by user id
+function getUserInfoById($userId, $filePath)
+{
+  // check if the file exists
+  if (!file_exists($filePath)) {
+    return ['status' => 'fail', 'message' => 'File not found'];
+  }
+
+  // read the file content
+  $jsonContent = file_get_contents($filePath);
+
+  // decode the JSON data
+  $data = json_decode($jsonContent, true);
+
+  // check for JSON decoding errors
+  if (json_last_error() !== JSON_ERROR_NONE) {
+    return ['status' => 'fail', 'message' => 'Error decoding JSON'];
+  }
+
+  // find the user by user id
+  foreach ($data as $item) {
+    if ($item['id'] === $userId) {
+      return ['status' => 'success', 'data' => $item];
+    }
+  }
+}
+
+// update user by user id
+function updateUserInfoById($userId, $data, $filePath)
+{
+  // check if the file exists
+  if (!file_exists($filePath)) {
+    return ['status' => 'fail', 'message' => 'File not found'];
+  }
+
+  // read the file content
+  $jsonContent = file_get_contents($filePath);
+
+  // decode the JSON data
+  $users = json_decode($jsonContent, true);
+
+  // check for JSON decoding errors
+  if (json_last_error() !== JSON_ERROR_NONE) {
+    return ['status' => 'fail', 'message' => 'Error decoding JSON'];
+  }
+
+  // find the user by user id
+  foreach ($users as $index => $item) {
+    if ($item['id'] === $userId) {
+      // update the user info
+      $users[$index] = array_merge($item, $data);
+      break;
+    }
+  }
+
+  // save the updated data
+  if (file_put_contents($filePath, json_encode($users, JSON_PRETTY_PRINT))) {
+    return ['status' => 'success', 'data' => $data];
+  } else {
+    return ['status' => 'fail'];
+  }
+}
+

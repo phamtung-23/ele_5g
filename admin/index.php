@@ -1,5 +1,5 @@
 <?php
-session_name("ele_5g_bod_gis");
+session_name("ele_5g_admin");
 session_start();
 unset($_SESSION['success']);
 // Kiểm tra xem người dùng đã đăng nhập hay chưa
@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id'])) {
 
     // Chuyển hướng người dùng đến trang tương ứng dựa trên vai trò
     switch ($role) {
-        case 'bod_pro_gis':
+        case 'admin':
             header("Location: home.php");
             exit();
         default:
@@ -119,7 +119,7 @@ if (isset($_SESSION['user_id'])) {
                             <div class="form-group">
                                 <label for="role"><i class="zmdi zmdi-view-list"></i></label>
                                 <select name="role" id="role" required>
-                                    <option value="bod_pro_gis">BoD GIS Province</option>
+                                    <option value="staff">Staff</option>
                                 </select>
                             </div>
                             <div class="form-group form-button">
