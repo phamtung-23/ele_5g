@@ -490,8 +490,8 @@ echo "</script>";
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
         <a href="index.php">Home</a>
-        <a href="all_site.php">Station Managment</a>
-        <a href="all_survey_station.php">Survey Station Managment</a>
+        <a href="all_site.php">Station Management</a>
+        <a href="all_survey_station.php">Survey Station Management</a>
         <a href="create_site.php">Survey Station</a>
         <a href="logout.php" class="logout">Logout</a>
     </div>

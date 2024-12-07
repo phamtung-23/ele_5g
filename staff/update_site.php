@@ -469,7 +469,7 @@ if ($dataResponse['status'] === 'success') {
         </div>
         <a href="index.php"><?= translate('Home', $language) ?></a>
         <a href="all_sector.php"><?= translate('Station Management', $language) ?></a>
-        <a href="all_survey_station.php">Survey Station Managment</a>
+        <a href="all_survey_station.php">Survey Station Management</a>
         <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
         <!-- add select languages -->
         <!-- add select languages -->
