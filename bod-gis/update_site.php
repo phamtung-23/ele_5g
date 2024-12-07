@@ -424,6 +424,7 @@ if ($dataResponse['status'] === 'success') {
         </div>
         <a href="index.php"><?= translate('Home', $language) ?></a>
         <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
+        <a href="all_survey_station.php">Survey Station Managment</a>
         <!-- add select languages -->
         <!-- add select languages -->
         <form method="POST" action="">

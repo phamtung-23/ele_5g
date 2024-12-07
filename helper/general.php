@@ -276,3 +276,28 @@ function updateUserInfoById($userId, $data, $filePath)
   }
 }
 
+// get all data on file json in a directory
+function getAllDataFiles($directory)
+{
+  // check if the directory exists
+  if (!is_dir($directory)) {
+    return ['status' => 'fail', 'message' => 'Directory not found'];
+  }
+
+  // get all files in the directory
+  $files = scandir($directory);
+
+  // filter out the current directory and parent directory
+  $files = array_diff($files, ['.', '..']);
+
+  // read the content of each file
+  $data = [];
+  foreach ($files as $file) {
+    $filePath = $directory . '/' . $file;
+    $jsonContent = file_get_contents($filePath);
+    $data[] = json_decode($jsonContent, true);
+  }
+
+  return ['status' => 'success', 'data' => $data];
+}
+

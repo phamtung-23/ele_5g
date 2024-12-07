@@ -168,8 +168,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .header {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 5px 20px;
             text-align: center;
+        }
+        .header h1 {
+            font-size: 2em;
         }
 
         .menu {
@@ -483,7 +486,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
         <a href="index.php"><?= translate('Home', $language) ?></a>
-        <a href="all_sector.php"><?= translate('Station Management', $language) ?></a>
+        <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
+        <a href="all_survey_station.php">Survey Station Managment</a>
         <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
         <!-- add select languages -->
         <!-- add select languages -->
