@@ -8,6 +8,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     exit();
 }
 
+// Set default language to 'en'
+if (!isset($_SESSION['language'])) {
+    $_SESSION['language'] = 'en';
+}
+
+// Change language if selected
+if (isset($_POST['language'])) {
+    $_SESSION['language'] = $_POST['language'];
+}
+
+$language = $_SESSION['language'];
+
 require_once '../helper/general.php';
 
 $fullName = $_SESSION['full_name'];
@@ -352,7 +364,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
 <body>
 
     <div class="header">
-        <h1>Staff's Dashboard</h1>
+        <h1><?= translate("Staff's Dashboard", $language) ?></h1>
     </div>
 
     <div class="menu">
@@ -360,16 +372,22 @@ table th:nth-child(n+31):nth-child(-n+38) {
         <div class="icon">
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
-          <a href="index.php">Home</a>
-         <a href="all_site.php">Station Management</a>
-         <a href="all_survey_station.php">Survey Station Management</a>
-        <a href="create_site.php">Survey Station</a>
-        <a href="logout.php" class="logout">Logout</a>
+          <a href="index.php"><?= translate('Home', $language) ?></a>
+         <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
+         <a href="all_survey_station.php"><?= translate('Survey Station Management', $language) ?></a>
+        <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
+        <form method="POST" action="">
+            <select class="form-select form-select-sm m-2" name="language" id="language" onchange="this.form.submit()" style="width: 150px;">
+                <option value="en" <?php echo $_SESSION['language'] == 'en' ? 'selected' : ''; ?>><?= translate('English', $language) ?></option>
+                <option value="ca" <?php echo $_SESSION['language'] == 'ca' ? 'selected' : ''; ?>><?= translate('Cambodian', $language) ?></option>
+            </select>
+        </form>
+        <a href="logout.php" class="logout"><?= translate('Logout', $language) ?></a>
     </div>
 
     <div class="container">
         <div class="welcome-message">
-            <p>Welcome, <?php echo $fullName; ?>!</p>
+            <p><?= translate('Welcome', $language) ?>, <?php echo $fullName; ?>!</p>
         </div>
 
         <div class="content">
@@ -379,16 +397,16 @@ table th:nth-child(n+31):nth-child(-n+38) {
             <table id="dataTable">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Province</th>
-                        <th>Site</th>
-                        <th>Status</th>
-                        <th>Update time</th>
-                        <th>BoD GIS Province</th>
-                        <th>Head ELE GIS</th>
-                        <th>Head ELE VTC</th>
-                        <th>Pending approve level</th>
-                        <th>Action</th>
+                        <th><?= translate('No', $language) ?></th>
+                        <th><?= translate('Province', $language) ?></th>
+                        <th><?= translate('Site', $language) ?></th>
+                        <th><?= translate('Status', $language) ?></th>
+                        <th><?= translate('Update time', $language) ?></th>
+                        <th><?= translate('BoD GIS Province', $language) ?></th>
+                        <th><?= translate('Head ELE GIS', $language) ?></th>
+                        <th><?= translate('Head ELE VTC', $language) ?></th>
+                        <th><?= translate('Pending approve level', $language) ?></th>
+                        <th><?= translate('Action', $language) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -450,18 +468,18 @@ table th:nth-child(n+31):nth-child(-n+38) {
                                 <td><?php echo $no++; ?></td> <!-- Incremented value for "No" -->
                                 <td><?php echo htmlspecialchars($key ); ?></td>
                                 <td><?php echo htmlspecialchars($item); ?></td>
-                                <td style="color: <?=$colorText?>;"><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['status']); ?></td>
+                                <td style="color: <?=$colorText?>;"><?php echo empty($approvalStatus) ? '': translate(htmlspecialchars($approvalStatus['status']), $language); ?></td>
                                 <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['updateTime']); ?></td>
-                                <td style="color: <?=$colorTextLevelBodProGis?>;"><?php echo empty($approvalStatusBodProGis) ? '': htmlspecialchars($approvalStatusBodProGis['status']); ?></td>
-                                <td style="color: <?=$colorTextLevelOfficeGis?>;"><?php echo empty($approvalStatusOfficeGis) ? '': htmlspecialchars($approvalStatusOfficeGis['status']); ?></td>
-                                <td style="color: <?=$colorTextLevelOfficeVtc?>;"><?php echo empty($approvalStatusOfficeVtc) ? '': htmlspecialchars($approvalStatusOfficeVtc['status']); ?></td>
+                                <td style="color: <?=$colorTextLevelBodProGis?>;"><?php echo empty($approvalStatusBodProGis) ? '': translate(htmlspecialchars($approvalStatusBodProGis['status']), $language); ?></td>
+                                <td style="color: <?=$colorTextLevelOfficeGis?>;"><?php echo empty($approvalStatusOfficeGis) ? '': translate(htmlspecialchars($approvalStatusOfficeGis['status']), $language); ?></td>
+                                <td style="color: <?=$colorTextLevelOfficeVtc?>;"><?php echo empty($approvalStatusOfficeVtc) ? '': translate(htmlspecialchars($approvalStatusOfficeVtc['status']), $language); ?></td>
                                 <td><?php echo empty($approvalStatus) ? '': htmlspecialchars($approvalStatus['role']); ?></td>
                                 <td style="display: flex; justify-content: center;">
                                     <?php 
                                         if ($status === 'Rejected') {
-                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">Update</button>';
+                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">'.translate('Update', $language).'</button>';
                                         } else {
-                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">Detail</button>';
+                                            echo '<button class="action-button" style="padding: 5px;" onclick="updateRecord(\'' . $item . '\')">'.translate('Detail', $language).'</button>';
                                         }
                                     ?>
                                 </td>

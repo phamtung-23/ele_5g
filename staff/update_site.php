@@ -469,7 +469,7 @@ if ($dataResponse['status'] === 'success') {
         </div>
         <a href="index.php"><?= translate('Home', $language) ?></a>
         <a href="all_sector.php"><?= translate('Station Management', $language) ?></a>
-        <a href="all_survey_station.php">Survey Station Management</a>
+        <a href="all_survey_station.php"><?= translate('Survey Station Management', $language) ?></a>
         <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
         <!-- add select languages -->
         <!-- add select languages -->
@@ -612,15 +612,15 @@ if ($dataResponse['status'] === 'success') {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel">Confirm Update</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel"><?= translate('Confirm Update', $language) ?></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to update this station?</p>
+                        <p><?= translate('Are you sure you want to update this station?', $language) ?></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="validateForm('submit')">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= translate('Cancel', $language) ?></button>
+                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="validateForm('submit')"><?= translate('Submit', $language) ?></button>
                     </div>
                 </div>
             </div>

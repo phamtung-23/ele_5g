@@ -487,7 +487,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <a href="index.php"><?= translate('Home', $language) ?></a>
         <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
-        <a href="all_survey_station.php">Survey Station Management</a>
+        <a href="all_survey_station.php"><?= translate('Survey Station Management', $language) ?></a>
         <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
         <!-- add select languages -->
         <!-- add select languages -->

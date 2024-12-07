@@ -8,6 +8,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     exit();
 }
 
+// Set default language to 'en'
+if (!isset($_SESSION['language'])) {
+    $_SESSION['language'] = 'en';
+}
+
+// Change language if selected
+if (isset($_POST['language'])) {
+    $_SESSION['language'] = $_POST['language'];
+}
+
+$language = $_SESSION['language'];
+
+
 require_once '../helper/general.php';
 require_once '../helper/getDataFormXlsx.php';
 
@@ -30,7 +43,7 @@ $keyValueList = [];
 // loop through dataFormInit to get index
 foreach ($dataFormInit as $row) {
     $keyValueList[] = $row[2];
-    $labelList[] = $row[1];
+    $labelList[] = $_SESSION['language'] == 'ca' ? $row[0] : $row[1];
 }
 
 $imgListKey = [
@@ -56,26 +69,26 @@ $imgListKey = [
 ];
 
 // add label for email on labelList position 2
-array_splice($labelList, 7, 0, 'Email');
-array_splice($labelList, 9, 0, 'CB EDC Images');
-array_splice($labelList, 13, 0, 'Cable Size Used Images');
-array_splice($labelList, 16, 0, 'CB Power Before Entering Station Images');
-array_splice($labelList, 22, 0, 'AC1_Unit Type Images');
-array_splice($labelList, 25, 0, 'AC2_Unit Type Images');
-array_splice($labelList, 29, 0, 'DC1_Number of Unused CB (> C63) in DC Units Images');
-array_splice($labelList, 34, 0, 'DC2_Number of Unused CB (> C63) in DC Units Images');
-array_splice($labelList, 39, 0, 'DC3_Number of Unused CB (> C63) in DC Units Images');
-array_splice($labelList, 44, 0, 'If CB Cannot Be Installed, Is There Space for Additional DC Power? - Images');
-array_splice($labelList, 47, 0, 'Can the Station Install Additional Outdoor Units? - Images');
-array_splice($labelList, 50, 0, 'Outdoor Battery Rack Model Images');
-array_splice($labelList, 52, 0, 'Number of Batteries in Battery Rack Images');
-array_splice($labelList, 56, 0, 'Engine Generator, In Use - Images');
-array_splice($labelList, 61, 0, 'Generator Type in Use - Images');
-array_splice($labelList, 77, 0, 'Number of 19" racks - Images');
-array_splice($labelList, 79, 0, 'Is there space for additional 4G BBU installation? - Images');
-array_splice($labelList, 82, 0, 'Is there space for additional 19" racks? - Images');
-array_splice($labelList, 86, 0, 'Number of DCDUs available at the station - Images');
-array_splice($labelList, 88, 0, 'Is there space for installing additional DCDU? - Images');
+array_splice($labelList, 7, 0, translate('Email', $language));
+array_splice($labelList, 9, 0, translate('CB EDC Images', $language));
+array_splice($labelList, 13, 0, translate('Cable Size Used Images', $language));
+array_splice($labelList, 16, 0, translate('CB Power Before Entering Station Images', $language));
+array_splice($labelList, 22, 0, translate('AC1_Unit Type Images', $language));
+array_splice($labelList, 25, 0, translate('AC2_Unit Type Images', $language));
+array_splice($labelList, 29, 0, translate('DC1_Number of Unused CB (> C63) in DC Units Images', $language));
+array_splice($labelList, 34, 0, translate('DC2_Number of Unused CB (> C63) in DC Units Images', $language));
+array_splice($labelList, 39, 0, translate('DC3_Number of Unused CB (> C63) in DC Units Images', $language));
+array_splice($labelList, 44, 0, translate('If CB Cannot Be Installed, Is There Space for Additional DC Power? - Images', $language));
+array_splice($labelList, 47, 0, translate('Can the Station Install Additional Outdoor Units? - Images', $language));
+array_splice($labelList, 50, 0, translate('Outdoor Battery Rack Model Images', $language));
+array_splice($labelList, 52, 0, translate('Number of Batteries in Battery Rack Images', $language));
+array_splice($labelList, 56, 0, translate('Engine Generator, In Use - Images', $language));
+array_splice($labelList, 61, 0, translate('Generator Type in Use - Images', $language));
+array_splice($labelList, 77, 0, translate('Number of 19" racks - Images', $language));
+array_splice($labelList, 79, 0, translate('Is there space for additional 4G BBU installation? - Images', $language));
+array_splice($labelList, 82, 0, translate('Is there space for additional 19" racks? - Images', $language));
+array_splice($labelList, 86, 0, translate('Number of DCDUs available at the station - Images', $language));
+array_splice($labelList, 88, 0, translate('Is there space for installing additional DCDU? - Images', $language));
 // add key for email on keyList position 2
 array_splice($keyValueList, 7, 0, 'email');
 array_splice($keyValueList, 9, 0, 'cb_edc_img');
@@ -481,7 +494,7 @@ echo "</script>";
 <body>
 
     <div class="header">
-        <h1>Staff's Dashboard</h1>
+        <h1><?= translate("Staff's Dashboard", $language) ?></h1>
     </div>
 
     <div class="menu">
@@ -489,23 +502,29 @@ echo "</script>";
         <div class="icon">
             <img src="../images/icon.jpg" alt="Home Icon" class="menu-icon">
         </div>
-        <a href="index.php">Home</a>
-        <a href="all_site.php">Station Management</a>
-        <a href="all_survey_station.php">Survey Station Management</a>
-        <a href="create_site.php">Survey Station</a>
-        <a href="logout.php" class="logout">Logout</a>
+        <a href="index.php"><?= translate('Home', $language) ?></a>
+        <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
+        <a href="all_survey_station.php"><?= translate('Survey Station Management', $language) ?></a>
+        <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
+        <form method="POST" action="">
+            <select class="form-select form-select-sm m-2" name="language" id="language" onchange="this.form.submit()" style="width: 150px;">
+                <option value="en" <?php echo $_SESSION['language'] == 'en' ? 'selected' : ''; ?>><?= translate('English', $language) ?></option>
+                <option value="ca" <?php echo $_SESSION['language'] == 'ca' ? 'selected' : ''; ?>><?= translate('Cambodian', $language) ?></option>
+            </select>
+        </form>
+        <a href="logout.php" class="logout"><?= translate('Logout', $language) ?></a>
     </div>
 
     <div class="container-table">
         <div class="welcome-message">
-            <p>Welcome, <?php echo $fullName; ?>!</p>
+            <p><?= translate('Welcome', $language) ?>, <?php echo $fullName; ?>!</p>
         </div>
 
         <div class="content">
             <div class="d-flex justify-content-end m-2">
                 <button class="btn btn-success" onclick="exportToCSV()">
                     <i class="ph ph-export"></i>
-                    Export CSV
+                    <?= translate('Export CSV', $language) ?>
                 </button>
             </div>
             <!-- Data Table -->
@@ -530,7 +549,7 @@ echo "</script>";
                                 if (array_search($key, $imgListKey) !== false) {
                                     echo "<td>";
                                     foreach ($item[$key] as $img) {
-                                        echo "<a href='" . $img . "' target='_blank'>View Image</a><br/>";
+                                        echo "<a href='" . $img . "' target='_blank'>".translate('View Image',$language)."</a><br/>";
                                     }
                                     echo "</td>";
                                 } else {
