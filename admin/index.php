@@ -119,7 +119,7 @@ if (isset($_SESSION['user_id'])) {
                             <div class="form-group">
                                 <label for="role"><i class="zmdi zmdi-view-list"></i></label>
                                 <select name="role" id="role" required>
-                                    <option value="staff">Staff</option>
+                                    <option value="admin">Admin</option>
                                 </select>
                             </div>
                             <div class="form-group form-button">

@@ -15,9 +15,10 @@
             ]
         },
         "CHH": {
-            "number": 1,
+            "number": 2,
             "list": [
-                "CHH0017"
+                "CHH0017",
+                "CHH0003"
             ]
         }
     }
