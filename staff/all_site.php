@@ -375,7 +375,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
           <a href="index.php"><?= translate('Home', $language) ?></a>
          <a href="all_site.php"><?= translate('Station Management', $language) ?></a>
          <a href="all_survey_station.php"><?= translate('Survey Station Management', $language) ?></a>
-        <a href="create_site.php"><?= translate('Survey Station', $language) ?></a>
+        <a href="create_site.php?create=true"><?= translate('Survey Station', $language) ?></a>
         <form method="POST" action="">
             <select class="form-select form-select-sm m-2" name="language" id="language" onchange="this.form.submit()" style="width: 150px;">
                 <option value="en" <?php echo $_SESSION['language'] == 'en' ? 'selected' : ''; ?>><?= translate('English', $language) ?></option>

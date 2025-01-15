@@ -14,6 +14,8 @@ if (isset($_POST['language'])) {
 
 $language = $_SESSION['language'];
 
+$isCreate = $_GET['create'] ?? 'false';
+
 // Check if the user is logged in; if not, redirect to login
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     echo "<script>alert('You are not logged in! Please log in again.'); window.location.href = 'index.php';</script>";
@@ -638,11 +640,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $index++;
             }
             // check data is submitted then disable button
-            if (isset($dataSaveInfo['status']) && $dataSaveInfo['status'] === 'submitted') {
+            if (isset($dataSaveInfo['status']) && $dataSaveInfo['status'] === 'submitted' && $isCreate !== 'true') {
                 $hiddenBtn = 'd-none';
             } else {
                 $hiddenBtn = '';
             }
+            echo $hiddenBtn;
             // Add a submit button
             echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 '.$hiddenBtn.'">
                     <button id="save-info" type="button" class="btn btn-light" onclick="validateForm(\'save\')">' . translate('Save', $language) . '</button>

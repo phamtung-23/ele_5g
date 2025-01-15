@@ -1,16 +1,21 @@
 <?php
+set_time_limit(1000);
 include '../../../helper/general.php'; // Adjust the path as necessary
 include '../../../helper/payment.php'; // Adjust the path as necessary
 require '../../../library/google_api/vendor/autoload.php'; // Đảm bảo đường dẫn đúng
 
-function uploadFileToGoogleDrive($filePath, $fileName, $folderId)
+
+function initializeGoogleDriveClient()
 {
   $client = new Google_Client();
   $client->setAuthConfig('gdcredentials.json'); // Đường dẫn tới file credential
   $client->addScope(Google_Service_Drive::DRIVE_FILE);
-
   $service = new Google_Service_Drive($client);
 
+  return $service;
+}
+function uploadFileToGoogleDrive($service, $filePath, $fileName, $folderId)
+{
   $fileMetadata = new Google_Service_Drive_DriveFile([
     'name' => $fileName,
     'parents' => [$folderId]
@@ -26,6 +31,7 @@ function uploadFileToGoogleDrive($filePath, $fileName, $folderId)
     ]);
     return "https://drive.google.com/file/d/" . $file->id . "/view";
   } catch (Exception $e) {
+    logEntry($e->getMessage());
     return null;
   }
 }
@@ -62,6 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
       $dataPrevious = $dataReference;
     }
+
+    $service = initializeGoogleDriveClient();
     
     // Handle file uploads and save to Google Drive
     if (!empty($_FILES)) {
@@ -79,11 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           if (move_uploaded_file($fileTmpName, $filePath)) {
             // get file name = stationName + fileKey + index + fileName
             $fileNameGGDrive = $stationName . '_' . $fileKey . '_' . $index . '_' . $fileName;
-            $linkImg = uploadFileToGoogleDrive($filePath, $fileNameGGDrive, $folderId);
+            $linkImg = uploadFileToGoogleDrive($service, $filePath, $fileNameGGDrive, $folderId);
             if ($linkImg) {
               $data[$fileKey][] = $linkImg;
               unlink($filePath);
             }else{
+              logEntry('Upload file to Google Drive failed: '. $fileNameGGDrive);
               // remove file if upload fail
               unlink($filePath);
             }
