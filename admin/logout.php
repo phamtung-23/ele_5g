@@ -1,5 +1,5 @@
 <?php
-session_name("ele_5g_bod_gis");
+session_name("ele_5g_admin");
 session_start();
 
 // Clear all sessions

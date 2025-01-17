@@ -100,6 +100,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         $dataStationName = getDataFormXlsx($filePathStation);
 
+        $stationType = [];
+        foreach ($dataStationName as $key => $value) {
+            $stationType[] = $value[4];
+        }
+        // set unique station type
+        $stationType = array_unique($stationType);
+        if (!empty($stationType) && count($stationType) > 1) {
+            $stationTypeCell = [];
+            $stationTypeCellString = '';
+            $index = 1;
+            foreach ($stationType as $key => $value) {
+                $stationTypeCell[] = $index . ': ' . $value;
+                $stationTypeCellString .= $index . ': ' . $value . "\n";
+                $index++;
+            }
+        }
+
         // filter by stationName in dataStationName row[1]
         $dataStationName = array_filter($dataStationName, function ($item) use ($stationName) {
             return $item[1] == $stationName;
@@ -173,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 5px 20px;
             text-align: center;
         }
+
         .header h1 {
             font-size: 2em;
         }
@@ -556,6 +574,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $index = 0;
 
             foreach ($dataFormInit as $row) {
+                if ($index == 5) {
+                    $row[4] = $stationTypeCellString;
+                    $row[5] = $stationTypeCellString;
+                    $row[6] = $stationTypeCellString;
+                    $row[7] = $stationTypeCellString;
+                }
                 // check if field is hidden
                 $classHidden = '';
                 $requiredField = 'required';
@@ -599,7 +623,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // If there are options, create a select dropdown
                 if (!empty($row['5'])) {
                     // Split the options by newline
-                    $options = $language === 'en' ? explode("\n", $row['5']) : explode("\n", $row['4']);
+                    
+                    if ($index == 5) {
+                        $options = $stationTypeCell;
+                    }else {
+                        $options = $language === 'en' ? explode("\n", $row['5']) : explode("\n", $row['4']);
+                    }
+
                     if ($row['2'] == $selectShowField) {
                         echo '<select class="form-select" id="' . $row['2'] . '" name="' . $row['2'] . '" required onchange="showHideFields(this)">';
                     } else {
@@ -630,9 +660,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo '</div>';
                 echo "<div id='" . htmlspecialchars($row['2']) . "_img_names' class='row'>";
                 foreach ($imageList as $image) {
-                    $index = 1;
-                    echo "<a href=" . $image . " class='col-md-12 text-end' target='_blank'> Image " . $index . "</a>";
-                    $index++;
+                    $indexImg = 1;
+                    echo "<a href=" . $image . " class='col-md-12 text-end' target='_blank'> Image " . $indexImg . "</a>";
+                    $indexImg++;
                 }
                 echo "</div>";
                 echo '</div>';
@@ -647,7 +677,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             echo $hiddenBtn;
             // Add a submit button
-            echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 '.$hiddenBtn.'">
+            echo '<div class="form-group mt-3 d-flex justify-content-end gap-2 ' . $hiddenBtn . '">
                     <button id="save-info" type="button" class="btn btn-light" onclick="validateForm(\'save\')">' . translate('Save', $language) . '</button>
                     <button id="submit-info" type="button" class="btn btn-success" onclick="validateForm(\'submit\')">' . translate('Submit', $language) . '</button>
                 </div>';

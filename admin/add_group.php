@@ -176,7 +176,7 @@ echo '</script>';
                 <div class="form-group mt-3 d-flex justify-content-end gap-2">
                     <?php
                         if (isset($usersData['group']) && $usersData['group'] !== '') {
-                            // echo translate('Update', $language);
+                            echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Update', $language) . '</button>';
                         } else {
                             echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Add Group', $language) . '</button>';
                         }
