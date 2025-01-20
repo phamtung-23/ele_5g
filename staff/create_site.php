@@ -46,12 +46,15 @@ if (!isset($infoCurrentUser['group']) || $infoCurrentUser['group'] === '') {
 // get list station name by group
 $filePathGroup = "../database/template/teams.xlsx";
 $groupData = getDataFormXlsx($filePathGroup);
+$stationTypeAll = [];
 $listStationName = [];
 foreach ($groupData as $row) {
+    $stationTypeAll[] = $row[4];
     if ($row[3] === $infoCurrentUser['group']) {
         $listStationName[] = $row[2];
     }
 }
+$listStationTypeAll = array_unique($stationTypeAll);
 
 // get data form init_form.xlsx
 $dataFormInit = getDataFormXlsx('../database/template/init_form.xlsx');
@@ -100,12 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         $dataStationName = getDataFormXlsx($filePathStation);
 
-        $stationType = [];
-        foreach ($dataStationName as $key => $value) {
-            $stationType[] = $value[4];
-        }
+        // $stationType = [];
+        // foreach ($dataStationName as $key => $value) {
+        //     $stationType[] = $value[4];
+        // }
         // set unique station type
-        $stationType = array_unique($stationType);
+        // $stationType = array_unique($stationType);
+        $stationType = $listStationTypeAll;
         if (!empty($stationType) && count($stationType) > 1) {
             $stationTypeCell = [];
             $stationTypeCellString = '';
@@ -885,7 +889,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }).then(() => {
                             // alert('Data submitted successfully!');
                             // reload this page
-                            location.reload();
+                            // location.reload();
+                            window.location.href = 'home.php';
+                            
                         });
                     } else {
                         Swal.close();

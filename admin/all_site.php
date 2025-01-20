@@ -394,7 +394,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
                         <th>Province</th>
                         <th>Site</th>
                         <th>Status</th>
-                        <th>Update time</th>
+                        <th>Last update time</th>
                         <th>Pending approve level</th>
                         <th>Action</th>
                     </tr>
@@ -434,7 +434,7 @@ table th:nth-child(n+31):nth-child(-n+38) {
                                     }
 
                                     if (!empty($stationData)) {
-                                        $approvalStatus = getApprovalStatusByRole($stationData['approval'], $_SESSION['role']);
+                                        $approvalStatus = getApprovalStatusAdmin($stationData['approval']);
                                     } else {
                                         $approvalStatus = [];
                                     }

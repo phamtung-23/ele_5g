@@ -183,6 +183,32 @@ function getApprovalStatusByRole($approval, $role)
   }
 }
 
+// get the approval status in admin page
+function getApprovalStatusAdmin($approval)
+{
+  $levelName = [
+    'bod_pro_gis' => 'BoD GIS Province',
+    'office_gis' => 'Head ELE GIS',
+    'office_vtc' => 'Head ELE VTC',
+  ];
+  // Check the approval status
+  $updateTime = '';
+  foreach ($approval as $item) {
+    // check if update time is valid
+    if ($item['updateTime'] !== '') {
+      $updateTime = $item['updateTime'];
+    }
+    if ($item['status'] === 'rejected') {
+      return ['status' => 'rejected', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
+    }
+    if ($item['status'] === 'pending') {
+      return ['status' => 'pending', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
+    }
+  }
+
+  return ['status' => 'approved', 'role' => $levelName[$item['role']], 'updateTime' => $updateTime];
+}
+
 // get information of the user by email
 function getUserInfo($email)
 {

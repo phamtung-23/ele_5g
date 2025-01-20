@@ -76,7 +76,7 @@ $showForm = true;
 
 // split station name 'BAT00002' to 'BAT'
 $stationNameFile = substr($stationName, 0, 3);
-$filePathStation = '../database/template/' . $stationNameFile . '.xlsx';
+$filePathStation = '../database/template/station_type.xlsx';
 // check filePathStation exists
 if (!file_exists($filePathStation)) {
     echo "<script>alert('Station name not found! Please try again.'); window.location.href = 'create_site.php';</script>";
@@ -86,7 +86,7 @@ $dataStationName = getDataFormXlsx($filePathStation);
 
 $stationType = [];
 foreach ($dataStationName as $key => $value) {
-    $stationType[] = $value[4];
+    $stationType[] = $value[0];
 }
 // set unique station type
 $stationType = array_unique($stationType);
