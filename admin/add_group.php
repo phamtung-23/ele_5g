@@ -58,9 +58,19 @@ if (!empty($dataProvince)) {
     }
 }
 
+$listProvincePath = '../database/template/province.xlsx';
+// check if the file exists
+if (!file_exists($listProvincePath)) {
+    echo "<script>alert('The province file does not exist!');</script>";
+    exit();
+}
+
+// get data form province.xlsx
+$dataListProvince = getDataFormXlsx($listProvincePath);
+
+
 echo '<script>';
 echo 'const currentUser = ' . json_encode($usersData) . ';';
-echo 'console.log(currentUser);';
 echo '</script>';
 
 ?>
@@ -127,10 +137,36 @@ echo '</script>';
             </div>
             <div class="form-group row mt-3">
                 <div class="col-md-4">
+                    <label class="form-label" for="role"><?= translate('Role', $language) ?>:</label>
+                </div>
+                <div class="col-md-8">
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="" disabled selected><?= translate('Select Role', $language) ?></option>
+                        <option value="staff" <?= $usersData['role'] === 'staff' ? 'selected' : ''; ?>><?= translate('Staff', $language) ?></option>
+                        <option value="bod_pro_gis" <?= $usersData['role'] === 'bod_pro_gis' ? 'selected' : ''; ?>><?= translate('BoD GIS Province', $language) ?></option>
+                        <option value="office_gis" <?= $usersData['role'] === 'office_gis' ? 'selected' : ''; ?>><?= translate('Head ELE GIS', $language) ?></option>
+                        <option value="office_vtc" <?= $usersData['role'] === 'office_vtc' ? 'selected' : ''; ?>><?= translate('Head ELE VTC', $language) ?></option>
+                    </select>
+                    <!-- <input class="form-control" type="role" id="role" name="role" value="<?= $usersData['role']; ?>" required disabled> -->
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-md-4">
                     <label class="form-label" for="province"><?= translate('Province', $language) ?>:</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" type="text" id="province" name="province" value="<?= $usersData['province']; ?>" required disabled>
+                <select class="form-select" id="province" name="province" required>
+                        <option value="" disabled selected><?= translate('Select Province', $language) ?></option>
+                        <?php
+                        foreach ($dataListProvince as $row) {
+                            if ($row[0] === $usersData['province']) {
+                                echo '<option value="' . $row[0] . '" selected>' . $row[0] . '</option>';
+                            } else {
+                                echo '<option value="' . $row[0] . '">' . $row[0] . '</option>';
+                            }
+                        }
+                        ?>
+                </select>
                 </div>
             </div>
             <div class="form-group row mt-3">
@@ -150,7 +186,7 @@ echo '</script>';
                 </div>
             </div>
             <?php
-                if ($usersData['role'] === 'staff') {
+            if ($usersData['role'] === 'staff') {
             ?>
                 <div class="form-group row mt-3">
                     <div class="col-md-4">
@@ -172,19 +208,23 @@ echo '</script>';
                         </select>
                     </div>
                 </div>
-            
+
                 <div class="form-group mt-3 d-flex justify-content-end gap-2">
                     <?php
-                        if (isset($usersData['group']) && $usersData['group'] !== '') {
-                            echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Update', $language) . '</button>';
-                        } else {
-                            echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Add Group', $language) . '</button>';
-                        }
+                    if (isset($usersData['group']) && $usersData['group'] !== '') {
+                        echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Update', $language) . '</button>';
+                    } else {
+                        echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalApprove">' . translate('Add Group', $language) . '</button>';
+                    }
                     ?>
 
                 </div>
             <?php
-                }
+            } else {
+                echo '<div class="form-group mt-3 d-flex justify-content-end gap-2">';
+                echo '<button id="submit-info" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalUpdate">' . translate('Update', $language) . '</button>';
+                echo '</div>';
+            }
             ?>
         </form>
 
@@ -206,9 +246,29 @@ echo '</script>';
                 </div>
             </div>
         </div>
+        <!-- Modal confirm -->
+        <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel">Confirm Add Group</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to update information for email <?= $usersData['email']; ?>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="handleUpdateInfo()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
+        const exampleModalUpdate = document.getElementById('exampleModalUpdate')
+        const exampleModalApprove = document.getElementById('exampleModalApprove')
         // JavaScript function to validate the form before saving or submitting
         function validateForm(action) {
             var form = document.getElementById('form-info');
@@ -260,10 +320,32 @@ echo '</script>';
         }
 
         function handleAddGroup() {
+            const group = document.getElementById('group').value;
+            const role = document.getElementById('role').value;
+            const province = document.getElementById('province').value;
+            const modal = bootstrap.Modal.getInstance(exampleModalApprove);
+        
+            if (role === '') {
+                modal.hide();
+                alert('Please select a role!');
+                return;
+            }
+            if (province === '') {
+                modal.hide();
+                alert('Please select a province!');
+                return;
+            }
+            if (group === '') {
+                modal.hide();
+                alert('Please select a group!');
+                return;
+            }
             fetch('backend/site/handle_add_group.php', {
                     method: 'POST',
                     body: JSON.stringify({
-                        group: document.getElementById('group').value,
+                        group: group,
+                        role,
+                        province,
                         userId: currentUser.id
                     }),
                     headers: {
@@ -315,7 +397,97 @@ echo '</script>';
                         Swal.fire({
                             position: "center",
                             icon: "success",
-                            text: "Approved successfully!",
+                            text: "Update successfully!",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            // alert('Data submitted successfully!');
+                            // reload this page
+                            location.reload();
+                        });
+                    } else {
+                        Swal.close();
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    alert(error.message);
+                });
+        };
+
+        function handleUpdateInfo() {
+            const role = document.getElementById('role').value;
+            const province = document.getElementById('province').value;
+            const modal = bootstrap.Modal.getInstance(exampleModalApprove);
+        
+            if (role === '') {
+                modal.hide();
+                alert('Please select a role!');
+                return;
+            }
+            if (province === '') {
+                modal.hide();
+                alert('Please select a province!');
+                return;
+            }
+            fetch('backend/site/handle_update_info.php', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        role,
+                        province,
+                        userId: currentUser.id
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(async (data) => {
+                    if (data.status === 'success') {
+                        // add alert processing
+                        Swal.fire({
+                            title: 'Processing...',
+                            text: 'Sending message to Telegram...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            },
+                        });
+                        // // send message to telegram
+                        // const staffInfo = getUserInfoByEmail(data.data.email);
+                        // let telegramMessage = '';
+
+                        // telegramMessage = `**The Request Approved!**\n` +
+                        //     `Creator: ${staffInfo.fullname} - ${staffInfo.email}\n` +
+                        //     `Station Name: ${document.getElementById('station_name').value}\n` +
+                        //     `Branch: ${data.data.branch}\n` +
+                        //     `Station Code (7 digits): ${data.data.station_code_7_digits}\n` +
+                        //     `Station Code: ${data.data.station_code}\n` +
+                        //     `Station Type: ${data.data.station_type}\n` +
+                        //     `Group: ${data.data.group}\n` +
+                        //     `Approve by: <?php echo $fullName . ' - ' . $userEmail ?>\n` +
+                        //     `Update At: ${new Date().toLocaleString()}\n`;
+
+
+                        // // Gửi tin nhắn đến Telegram
+                        // await fetch('../sendTelegram.php', {
+                        //     method: 'POST',
+                        //     headers: {
+                        //         'Content-Type': 'application/json'
+                        //     },
+                        //     body: JSON.stringify({
+                        //         message: telegramMessage,
+                        //         id_telegram: staffInfo.idtele // Truyền thêm thông tin operator_phone
+                        //     })
+                        // });
+
+                        // add alert success
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            text: "Update successfully!",
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {

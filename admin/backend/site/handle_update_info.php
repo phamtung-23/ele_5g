@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Check if the data is valid
   if (isset($data['userId'])) {
     $userID = $data['userId'];
-    $group = isset($data['group']) ? $data['group'] : '';
     $filePath = '../../../database/account/users.json';
 
     // get the user info by user id
@@ -22,13 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
       $response = ['status' => 'fail', 'message' => 'User not found'];
     }
-
-    // check if the group is empty
-    if (!empty($group)) {
-      // add the group to the user info
-      $userInfo['group'] = $group;
-    }
-
     // update the user info
     $userInfo['role'] = $data['role'];
     $userInfo['province'] = $data['province'];

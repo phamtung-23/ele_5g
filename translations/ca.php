@@ -64,5 +64,6 @@ return [
     'Are you sure you want to approve this station?' => 'តើអ្នកច្បាស់ជាដែលចង់អនុម័តស្ថានីយនេះទេ?',
     "Head ELE VTC's Dashboard" => "ផ្ទាំងគ្រប់គ្រងគណនី VTC នៃប្រធាន ELE",
     'Approve' => 'អនុម័ត',
-    'Reject' => 'បដិសេធ'
+    'Reject' => 'បដិសេធ',
+    'role' => 'តួនាទី'
 ];
