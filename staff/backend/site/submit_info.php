@@ -74,47 +74,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $dataPrevious = $dataReference;
     }
 
-    $service = initializeGoogleDriveClient();
+    // $service = initializeGoogleDriveClient();
 
-    // Handle file uploads and save to Google Drive
-    if (!empty($_FILES)) {
-      foreach ($_FILES as $fileKey => $fileArray) {
-        $uploadDir = $stationName . '_files/';
-        if (!is_dir($uploadDir)) {
-          mkdir($uploadDir, 0777, true);
-        }
+    // // Handle file uploads and save to Google Drive
+    // if (!empty($_FILES)) {
+    //   foreach ($_FILES as $fileKey => $fileArray) {
+    //     $uploadDir = $stationName . '_files/';
+    //     if (!is_dir($uploadDir)) {
+    //       mkdir($uploadDir, 0777, true);
+    //     }
 
-        foreach ($fileArray['name'] as $index => $fileName) {
-          $fileTmpName = $fileArray['tmp_name'][$index];
-          $filePath = $uploadDir . basename($fileName);
-          $folderId = '1Hb0ikxBxcjKKOHwbN09B-zpjLFal-Ch7';
+    //     foreach ($fileArray['name'] as $index => $fileName) {
+    //       $fileTmpName = $fileArray['tmp_name'][$index];
+    //       $filePath = $uploadDir . basename($fileName);
+    //       $folderId = '1Hb0ikxBxcjKKOHwbN09B-zpjLFal-Ch7';
 
-          if (move_uploaded_file($fileTmpName, $filePath)) {
-            // get file name = stationName + fileKey + index + fileName
-            $fileNameGGDrive = $stationName . '_' . $fileKey . '_' . $index . '_' . $fileName;
-            $linkImg = uploadFileToGoogleDrive($service, $filePath, $fileNameGGDrive, $folderId);
-            if ($linkImg) {
-              $data[$fileKey][] = $linkImg;
-              unlink($filePath);
-            } else {
-              logEntry('Upload file to Google Drive failed: '. $fileNameGGDrive);
-              // remove file if upload fail
-              unlink($filePath);
-            }
-          }
-        }
-        // check $data[$fileKey] is empty or not, if empty then set previous data
-        if (empty($data[$fileKey])) {
-          // check previous data is empty or not
-          if (!empty($dataPrevious)) {
-            if (isset($dataPrevious[$fileKey])) {
-              $data[$fileKey] = $dataPrevious[$fileKey];
-            }
-          }
-        }
-        rmdir($uploadDir);
-      }
-    }
+    //       if (move_uploaded_file($fileTmpName, $filePath)) {
+    //         // get file name = stationName + fileKey + index + fileName
+    //         $fileNameGGDrive = $stationName . '_' . $fileKey . '_' . $index . '_' . $fileName;
+    //         $linkImg = uploadFileToGoogleDrive($service, $filePath, $fileNameGGDrive, $folderId);
+    //         if ($linkImg) {
+    //           $data[$fileKey][] = $linkImg;
+    //           unlink($filePath);
+    //         } else {
+    //           logEntry('Upload file to Google Drive failed: '. $fileNameGGDrive);
+    //           // remove file if upload fail
+    //           unlink($filePath);
+    //         }
+    //       }
+    //     }
+    //     // check $data[$fileKey] is empty or not, if empty then set previous data
+    //     if (empty($data[$fileKey])) {
+    //       // check previous data is empty or not
+    //       if (!empty($dataPrevious)) {
+    //         if (isset($dataPrevious[$fileKey])) {
+    //           $data[$fileKey] = $dataPrevious[$fileKey];
+    //         }
+    //       }
+    //     }
+    //     rmdir($uploadDir);
+    //   }
+    // }
 
     // add field approve array include: role (bod_pro_gis, office_gis, office_vtc), email, status, timeApprove, timeReject, comment
     $data['approval'][] = [

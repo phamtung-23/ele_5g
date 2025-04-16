@@ -1,51 +1,65 @@
 {
     "id": "2",
     "branch": "CHH",
-    "station_code_7_digits": "CHH0017",
-    "station_code": "CHH0017",
+    "station_code_7_digits": "CHH0087",
+    "station_code": "CHH0087",
     "group": "CHH_T2",
-    "station_type": "Macro",
-    "room_type_in_station": "BAT",
+    "station_type": "13",
+    "room_type_in_station": "6",
     "cb_edc": "1",
+    "cb_edc_link": "https:\/\/drive.google.com\/file\/d\/19BU5mcvEnHZv95Ady_pXytF9Xilik3AW\/view,https:\/\/drive.google.com\/file\/d\/19RcH703OL4Qj2pJI3sUJ2wSVCcAFXZbR\/view",
     "electrical_network": "1",
     "cable_type_from_meter_to_station": "1",
     "cable_size_used": "1",
+    "cable_size_used_link": "https:\/\/drive.google.com\/file\/d\/1D-CBFoPs3LdfN87CjYL4vqWfNS613U9f\/view",
     "has_cb_before_station": "1",
     "cb_power_before_station": "1",
+    "cb_power_before_station_link": "https:\/\/drive.google.com\/file\/d\/1cj6GUsWGUb4qCC4MJ8rDkx47rvlkmLwW\/view",
     "distance_meter_to_station": "12",
     "is_station_low_voltage": "1",
     "can_connect_to_3p": "2",
     "distance_to_3p_connection_point": "12",
     "ac1_unit_type": "1",
+    "ac1_unit_type_link": "https:\/\/drive.google.com\/file\/d\/1fZ4dYrbjKlU6g9T_0JPgXVeepBl5_IW4\/view",
     "ac1_unused_cb": "12",
     "ac2_unit_type": "1",
+    "ac2_unit_type_link": "https:\/\/drive.google.com\/file\/d\/1A_lEFrWp67nBD2pbOGMpnTnRl10Tan1Z\/view",
     "ac2_unused_cb": "12",
     "number_of_dc_units": "3",
     "dc1_unused_cb": "12",
+    "dc1_unused_cb_link": "https:\/\/drive.google.com\/file\/d\/1tyI7Ai18XnUUxd4N4pVzWDbQvyBVpg86\/view",
     "dc1_space_for_additional_cb": "1",
     "dc1_additional_cb": "12",
     "dc1_reason_for_not_installing_cb": "1",
     "dc2_unused_cb": "12",
+    "dc2_unused_cb_link": "https:\/\/drive.google.com\/file\/d\/1Q9MjC-0LK-pj3vUWcNbyYda0Fpup4Lbo\/view",
     "dc2_space_for_additional_cb": "2",
     "dc2_additional_cb": "12",
     "dc2_reason_for_not_installing_cb": "1",
     "dc3_unused_cb": "12",
+    "dc3_unused_cb_link": "https:\/\/drive.google.com\/file\/d\/1c09-MnZpb93zyipaMxIItIUYftLjdjQG\/view",
     "dc3_space_for_additional_cb": "1",
     "dc3_additional_cb": "12",
     "dc3_reason_for_not_installing_cb": "2",
     "space_for_additional_dc_power": "1",
+    "space_for_additional_dc_power_link": "https:\/\/drive.google.com\/file\/d\/1DJXRrtzGGuhgIxAw6w8Xikj0bQcXdjz-\/view",
     "reason_for_not_installing_dc": "12",
     "can_install_outdoor_units": "12",
+    "can_install_outdoor_units_link": "https:\/\/drive.google.com\/file\/d\/1GSqSuraaiqUk5U5We4pjs3x4kW5hXaGe\/view",
     "reason_for_not_installing_outdoor_units": "4",
     "outdoor_battery_rack_model": "0",
+    "outdoor_battery_rack_model_link": "https:\/\/drive.google.com\/file\/d\/1hidELOLzHCLkkV9VOhq4Ad1HeWKlFzll\/view",
     "number_of_batteries_in_rack": "2",
+    "number_of_batteries_in_rack_link": "https:\/\/drive.google.com\/file\/d\/1raoHG2v27tDkHW4FBtWd1ZfEPeHK1Zoe\/view",
     "can_install_additional_outdoor_battery_units": "1",
     "reason_for_not_installing_outdoor_battery_units": "1",
     "engine_generator_in_use": "2",
+    "engine_generator_in_use_link": "https:\/\/drive.google.com\/file\/d\/1k3JmLPn_OR7cRKL6rQJypWxipvNgDZ5Y\/view",
     "station_uses_generator": "1",
     "generator_power": "12",
     "cable_size_for_generator": "2",
     "generator_type_in_use": "1",
+    "generator_type_in_use_link": "https:\/\/drive.google.com\/file\/d\/1HQWsemsK3mHnt7TBiv47I7Y3nW5W4de8\/view",
     "can_install_generator": "1",
     "electrical_cable_plan": "1",
     "reason_for_not_installing_generator": "1",
@@ -61,103 +75,50 @@
     "distance_from_ats_gen_power_control_cables": "12",
     "ats_installation_location": "1",
     "number_of_19_racks": "12",
+    "number_of_19_racks_link": "https:\/\/drive.google.com\/file\/d\/1p0hKd9I09z2jYisPme9a_sHJhxNTgoTI\/view",
     "has_space_for_additional_4g_bbu": "1",
+    "has_space_for_additional_4g_bbu_link": "https:\/\/drive.google.com\/file\/d\/1Eo8RqZhvwmVb5p4sveoqJrH9dxNkyDpy\/view",
     "additional_4g_bbu_capacity": "12",
     "has_space_for_additional_19_racks": "1",
+    "has_space_for_additional_19_racks_link": "https:\/\/drive.google.com\/file\/d\/1Jskw2WcRVejQ5swMqvMf739GfYCZNZ05\/view",
     "additional_19_racks_capacity": "12",
     "reason_for_not_installing_19_racks": "1",
     "number_of_dcdu_at_station": "12",
+    "number_of_dcdu_at_station_link": "https:\/\/drive.google.com\/file\/d\/1lMuD399gigzdA6xloQDsV3oEyNeqiwJf\/view",
     "has_space_for_additional_dcdu": "2",
+    "has_space_for_additional_dcdu_link": "https:\/\/drive.google.com\/file\/d\/1WWgdtGyRsTi3KfSYaOfOMiIRTGQtvwyr\/view",
     "additional_dcdu_capacity": "12",
     "reason_for_not_installing_additional_dcdu": "1",
     "uses_mini_dc_unit_in_rru": "1",
     "can_install_batteries_in_mini_dc_rru": "1",
     "reason_for_not_installing_batteries_in_rru": "4",
     "email": "staff@gmail.com",
-    "reference_station": "CHA0007",
-    "station_name": "CHH0017",
-    "created_at": "2024-12-04 18:12:30",
-    "cb_edc_img": [
-        "https:\/\/drive.google.com\/file\/d\/1V5Sfkp0Pvt2INDHh2z1uheG8nTF2dikM\/view"
-    ],
-    "cable_size_used_img": [
-        "https:\/\/drive.google.com\/file\/d\/1eb2aDk7Uk1ASAL2PkpCMHj2zWlllzLq-\/view",
-        "https:\/\/drive.google.com\/file\/d\/1uRLptR81haDi4A9Bl_j9qIi8r9GbZ4Wg\/view"
-    ],
-    "cb_power_before_station_img": [
-        "https:\/\/drive.google.com\/file\/d\/18uswVPHos4wxu9Bb7RyMDPgJgnaRloAk\/view"
-    ],
-    "ac1_unit_type_img": [
-        "https:\/\/drive.google.com\/file\/d\/1I_8NIKmMGjpsT1Q624DQidhvdp4QeZ5L\/view"
-    ],
-    "ac2_unit_type_img": [
-        "https:\/\/drive.google.com\/file\/d\/1simqYHquK5gBg2mk4WxJe1hggvpQpvje\/view"
-    ],
-    "dc1_unused_cb_img": [
-        "https:\/\/drive.google.com\/file\/d\/1zJPZ-HhCOthJGru0-wWXI7lXMAIsqsrg\/view"
-    ],
-    "dc2_unused_cb_img": [
-        "https:\/\/drive.google.com\/file\/d\/1X0aMYuFifyGV1NFRrtt4ODHwAXG_yhKO\/view"
-    ],
-    "dc3_unused_cb_img": [
-        "https:\/\/drive.google.com\/file\/d\/1uC7ADmXIM-nJyUZy8i5Ywdh_gDYobjun\/view"
-    ],
-    "space_for_additional_dc_power_img": [
-        "https:\/\/drive.google.com\/file\/d\/127xy-FZRfC1456IJ56M3Bpf05OpFM6ej\/view"
-    ],
-    "can_install_outdoor_units_img": [
-        "https:\/\/drive.google.com\/file\/d\/1S6GWeRAROaPUA4siSmCaP2wQv9TSeFja\/view"
-    ],
-    "outdoor_battery_rack_model_img": [
-        "https:\/\/drive.google.com\/file\/d\/1XXZlXwJn-smY43ecXgn-fZyET6SFxvGZ\/view"
-    ],
-    "number_of_batteries_in_rack_img": [
-        "https:\/\/drive.google.com\/file\/d\/1NJunaf7pIrz87EqEfMByoA2EfrwbzOZx\/view"
-    ],
-    "engine_generator_in_use_img": [
-        "https:\/\/drive.google.com\/file\/d\/1GgWbl8JIWPGMKd7Pln8kWEqLpUuCJGuy\/view"
-    ],
-    "generator_type_in_use_img": [
-        "https:\/\/drive.google.com\/file\/d\/1ABrRN97K6AwSXBhUQ1_eSmk5zbNYRknP\/view"
-    ],
-    "number_of_19_racks_img": [
-        "https:\/\/drive.google.com\/file\/d\/12pdMFkLoznpz3EEz10CJ4fTXo9xiCxnd\/view"
-    ],
-    "has_space_for_additional_4g_bbu_img": [
-        "https:\/\/drive.google.com\/file\/d\/1Vghz4_ca54LO3aHrCAyavlaafUt3Phvg\/view"
-    ],
-    "has_space_for_additional_19_racks_img": [
-        "https:\/\/drive.google.com\/file\/d\/13Jcdggt3MSOxcrKMgg0NkReu-SUILdJV\/view"
-    ],
-    "number_of_dcdu_at_station_img": [
-        "https:\/\/drive.google.com\/file\/d\/1Egl2a3XTAyPj9jYC4VsTNKB8Dw38eN08\/view"
-    ],
-    "has_space_for_additional_dcdu_img": [
-        "https:\/\/drive.google.com\/file\/d\/1eSdsaQ1PmlIj2nNnJ-p3tBTz6UdTEQAx\/view"
-    ],
+    "reference_station": "CHH0212",
+    "station_name": "CHH0087",
+    "created_at": "2025-04-16 16:34:52",
+    "updated_at": "2025-04-16 16:38:20",
+    "status": "submitted",
     "approval": [
         {
             "role": "bod_pro_gis",
             "email": "bod_pro_gis@gmail.com",
             "status": "approved",
-            "updateTime": "2024-12-04 18:28:47",
+            "updateTime": "2025-04-16 17:18:54",
             "comment": ""
         },
         {
             "role": "office_gis",
             "email": "office_gis@gmail.com",
             "status": "approved",
-            "updateTime": "2024-12-04 18:32:01",
+            "updateTime": "2025-04-16 17:21:21",
             "comment": ""
         },
         {
             "role": "office_vtc",
-            "email": "",
-            "status": "pending",
-            "updateTime": "2024-12-04 18:12:30",
+            "email": "office_vtc@gmail.com",
+            "status": "approved",
+            "updateTime": "2025-04-16 17:23:08",
             "comment": ""
         }
-    ],
-    "updated_at": "2024-12-04 18:12:30",
-    "status": "submitted"
+    ]
 }

@@ -1,29 +1,19 @@
 {
     "staff@gmail.com": {
         "CHA": {
-            "number": 2,
+            "number": 0,
             "list": [
-                "CHA0001",
-                "CHA0002"
             ]
         },
         "BAT": {
-            "number": 2,
+            "number": 0,
             "list": [
-                "BAT0002",
-                "BAT0003"
             ]
         },
         "CHH": {
-            "number": 7,
+            "number": 1,
             "list": [
-                "CHH0017",
-                "CHH0003",
-                "CHH0014",
-                "CHH0172",
-                "CHH0193",
-                "CHH0205",
-                "CHH0212"
+                "CHH0087"
             ]
         }
     }

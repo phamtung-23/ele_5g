@@ -505,9 +505,10 @@ if ($dataResponse['status'] === 'success') {
                     $requiredField = '';
                     $requiredImgField = '';
                 }
-                if (isset($dataSaveInfo[$row['2'] . '_img']) && !empty($dataSaveInfo[$row['2'] . '_img'])) {
+                if (isset($dataSaveInfo[$row['2'] . '_link']) && !empty($dataSaveInfo[$row['2'] . '_link'])) {
                     $requiredImgField = '';
-                    $imageList = $dataSaveInfo[$row['2'] . '_img'];
+                    // convert string to array by ','
+                    $imageList = explode(',', $dataSaveInfo[$row['2'] . '_link']);
                 }
                 // check if hidden field has value then remove hidden class
                 if (isset($dataSaveInfo[$row['2']]) && !empty($dataSaveInfo[$row['2']])) {
@@ -569,7 +570,7 @@ if ($dataResponse['status'] === 'success') {
                 }
                 // render input file
                 if ($row['3'] == '1') {
-                    echo "<input class='form-control d-none' type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='showFileNames(this)' " . $requiredImgField . ">";
+                    echo "<input class='form-control d-none' disabled type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='showFileNames(this)' " . $requiredImgField . ">";
                     echo "<button id='" . htmlspecialchars($row['2']) . "_img' type='button' class='btn btn-secondary m-2 d-inline-block col-sm-6 col-lg-4 col-xl-4 col-xxl-4' onclick='document.getElementById(\"" . htmlspecialchars($row['2']) . "_img\").click()'><i class='ph ph-upload-simple'></i> " . translate('Upload image', $language) . "</button>";
                 }
                 echo '</div>';

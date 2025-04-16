@@ -93,25 +93,25 @@ array_splice($labelList, 86, 0, translate('Number of DCDUs available at the stat
 array_splice($labelList, 88, 0, translate('Is there space for installing additional DCDU? - Images', $language));
 // add key for email on keyList position 2
 array_splice($keyValueList, 7, 0, 'email');
-array_splice($keyValueList, 9, 0, 'cb_edc_img');
-array_splice($keyValueList, 13, 0, 'cable_size_used_img');
-array_splice($keyValueList, 16, 0, 'cb_power_before_station_img');
-array_splice($keyValueList, 22, 0, 'ac1_unit_type_img');
-array_splice($keyValueList, 25, 0, 'ac2_unit_type_img');
-array_splice($keyValueList, 29, 0, 'dc1_unused_cb_img');
-array_splice($keyValueList, 34, 0, 'dc2_unused_cb_img');
-array_splice($keyValueList, 39, 0, 'dc3_unused_cb_img');
-array_splice($keyValueList, 44, 0, 'space_for_additional_dc_power_img');
-array_splice($keyValueList, 47, 0, 'can_install_outdoor_units_img');
-array_splice($keyValueList, 50, 0, 'outdoor_battery_rack_model_img');
-array_splice($keyValueList, 52, 0, 'number_of_batteries_in_rack_img');
-array_splice($keyValueList, 56, 0, 'engine_generator_in_use_img');
-array_splice($keyValueList, 61, 0, 'generator_type_in_use_img');
-array_splice($keyValueList, 77, 0, 'number_of_19_racks_img');
-array_splice($keyValueList, 79, 0, 'has_space_for_additional_4g_bbu_img');
-array_splice($keyValueList, 82, 0, 'has_space_for_additional_19_racks_img');
-array_splice($keyValueList, 86, 0, 'number_of_dcdu_at_station_img');
-array_splice($keyValueList, 88, 0, 'has_space_for_additional_dcdu_img');
+array_splice($keyValueList, 9, 0, 'cb_edc_link');
+array_splice($keyValueList, 13, 0, 'cable_size_used_link');
+array_splice($keyValueList, 16, 0, 'cb_power_before_station_link');
+array_splice($keyValueList, 22, 0, 'ac1_unit_type_link');
+array_splice($keyValueList, 25, 0, 'ac2_unit_type_link');
+array_splice($keyValueList, 29, 0, 'dc1_unused_cb_link');
+array_splice($keyValueList, 34, 0, 'dc2_unused_cb_link');
+array_splice($keyValueList, 39, 0, 'dc3_unused_cb_link');
+array_splice($keyValueList, 44, 0, 'space_for_additional_dc_power_link');
+array_splice($keyValueList, 47, 0, 'can_install_outdoor_units_link');
+array_splice($keyValueList, 50, 0, 'outdoor_battery_rack_model_link');
+array_splice($keyValueList, 52, 0, 'number_of_batteries_in_rack_link');
+array_splice($keyValueList, 56, 0, 'engine_generator_in_use_link');
+array_splice($keyValueList, 61, 0, 'generator_type_in_use_link');
+array_splice($keyValueList, 77, 0, 'number_of_19_racks_link');
+array_splice($keyValueList, 79, 0, 'has_space_for_additional_4g_bbu_link');
+array_splice($keyValueList, 82, 0, 'has_space_for_additional_19_racks_link');
+array_splice($keyValueList, 86, 0, 'number_of_dcdu_at_station_link');
+array_splice($keyValueList, 88, 0, 'has_space_for_additional_dcdu_link');
 
 // get all data file json from folder
 $directory = '../database/site/dataSubmit';
@@ -549,11 +549,12 @@ echo "</script>";
                         // loop through labelList to get value
                         foreach ($keyValueList as $key) {
                             if (isset($item[$key])) {
-                                // check if the key is in the imgListKey array
-                                if (array_search($key, $imgListKey) !== false) {
+                                // check key last character is '_link'
+                                if (substr($key, -5) === '_link') {
+                                    $listImgs = explode(',', $item[$key]);
                                     echo "<td>";
-                                    foreach ($item[$key] as $img) {
-                                        echo "<a href='" . $img . "' target='_blank'>View Image</a><br/>";
+                                    foreach ($listImgs as $img) {
+                                        echo "<a href='" . $img . "' target='_blank'>".translate('View Image',$language)."</a><br/>";
                                     }
                                     echo "</td>";
                                 } else {

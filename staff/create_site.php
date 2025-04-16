@@ -133,6 +133,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         // $dataStationName is array so get first element
         $dataStationName = array_values($dataStationName)[0];
+
+        // Read and increment ID
+        $idFile = '../database/site/id.json';
+        $currentYear = date('Y');
+        $jsonDataIdSite = file_get_contents($idFile);
+        $dataIdSite = json_decode($jsonDataIdSite, true);
+        $newIdSite = $dataIdSite[$currentYear]["id"] + 1;
+        $dataIdSite[$currentYear]["id"] = $newIdSite;
+
         $dataStationNameArray = [
             "branch" => $dataStationName[0],
             "station_code_7_digits" => $dataStationName[1],
@@ -159,9 +168,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($dataResponse['status'] === 'success') {
         $dataSaveInfo = $dataResponse['data'];
         // Do something with the data
+        $dataStationNameArray['id'] = $dataSaveInfo['id'];
     } else {
         $dataSaveInfo = $dataReferenceStation;
+        $dataStationNameArray['id'] = $newIdSite;
     }
+    $dataSaveInfo['status'] = 'Created';
     // Set the flag to show the dynamic form below
     $showForm = $stationName !== '' ? true : false;
 }
@@ -594,9 +606,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $requiredField = '';
                     $requiredImgField = '';
                 }
-                if (isset($dataSaveInfo[$row['2'] . '_img']) && !empty($dataSaveInfo[$row['2'] . '_img'])) {
+                if (isset($dataSaveInfo[$row['2'] . '_link']) && !empty($dataSaveInfo[$row['2'] . '_link'])) {
                     $requiredImgField = '';
-                    $imageList = $dataSaveInfo[$row['2'] . '_img'];
+                    // convert string to array by ','
+                    $imageList = explode(',', $dataSaveInfo[$row['2'] . '_link']);
                 }
                 // check if hidden field has value then remove hidden class
                 if (isset($dataSaveInfo[$row['2']]) && !empty($dataSaveInfo[$row['2']])) {
@@ -627,10 +640,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // If there are options, create a select dropdown
                 if (!empty($row['5'])) {
                     // Split the options by newline
-                    
+
                     if ($index == 5) {
                         $options = $stationTypeCell;
-                    }else {
+                    } else {
                         $options = $language === 'en' ? explode("\n", $row['5']) : explode("\n", $row['4']);
                     }
 
@@ -658,15 +671,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 // render input file
                 if ($row['3'] == '1') {
-                    echo "<input class='form-control d-none' type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='showFileNames(this)' " . $requiredImgField . ">";
+                    echo "<input class='form-control d-none' type='file' id='" . htmlspecialchars($row['2']) . "_img' name='" . htmlspecialchars($row['2']) . "_img[]' multiple onchange='uploadImagesToGoogleDrive(this)' " . $requiredImgField . ">";
                     echo "<button id='" . htmlspecialchars($row['2']) . "_img' type='button' class='btn btn-secondary m-2 d-inline-block col-sm-6 col-lg-4 col-xl-4 col-xxl-4' onclick='document.getElementById(\"" . htmlspecialchars($row['2']) . "_img\").click()'><i class='ph ph-upload-simple'></i> " . translate('Upload image', $language) . "</button>";
+                    echo '<input type="hidden" id="' . htmlspecialchars($row['2']) . '_img_link" name="' . htmlspecialchars($row['2']) . '_link" value="' . (isset($dataSaveInfo[$row['2'] . '_link']) ? htmlspecialchars($dataSaveInfo[$row['2'] . '_link']) : '') . '">';
                 }
                 echo '</div>';
                 echo "<div id='" . htmlspecialchars($row['2']) . "_img_names' class='row'>";
-                foreach ($imageList as $image) {
-                    $indexImg = 1;
-                    echo "<a href=" . $image . " class='col-md-12 text-end' target='_blank'> Image " . $indexImg . "</a>";
-                    $indexImg++;
+                foreach ($imageList as $index => $image) {
+                    echo "<a href=" . $image . " class='col-md-12 text-end' target='_blank'> Image " . ($index + 1) . "</a>";
                 }
                 echo "</div>";
                 echo '</div>';
@@ -691,6 +703,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
+        // Declare the global object at the top of the script
+        const uploadedFilesMap = {};
         // JavaScript function to validate the form before saving or submitting
         function validateForm(action) {
             var form = document.getElementById('form-info');
@@ -748,7 +762,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const referenceStation = document.getElementById('reference_station').value;
             var formData = new FormData(form);
 
-            // add email creator to form data
+            // Add email creator to form data
             formData.append('email', userEmail);
 
             if (referenceStation !== '') {
@@ -767,11 +781,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 willClose: () => {
                     clearInterval(timerInterval);
                 }
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                // if (result.dismiss === Swal.DismissReason.timer) {
-                //     console.log("I was closed by the timer");
-                // }
             });
 
             // Add the station name to the form data
@@ -787,12 +796,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         Swal.fire({
                             position: "center",
                             icon: "success",
-                            text: "Data submitted successfully!",
+                            text: "Data saved successfully!",
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            // alert('Data submitted successfully!');
-                            // reload this page
                             location.reload();
                         });
                     } else {
@@ -805,7 +812,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     console.error('Error:', error);
                     alert('An error occurred.');
                 });
-        };
+        }
 
         function submitInfo() {
             var form = document.getElementById('form-info');
@@ -813,7 +820,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             const referenceStation = document.getElementById('reference_station').value;
             var formData = new FormData(form);
 
-            // add email creator to form data
+            // Add email creator to form data
             formData.append('email', userEmail);
 
             if (referenceStation !== '') {
@@ -832,11 +839,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 willClose: () => {
                     clearInterval(timerInterval);
                 }
-            }).then((result) => {
-                /* Read more about handling dismissals below */
-                // if (result.dismiss === Swal.DismissReason.timer) {
-                //     console.log("I was closed by the timer");
-                // }
             });
 
             // Add the station name to the form data
@@ -849,37 +851,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 .then(response => response.json())
                 .then(async data => {
                     if (data.status === 'success') {
-                        // Tạo nội dung tin nhắn để gửi cho các user có role là 'bod_pro_gis'
-                        usersData.forEach(async function(user) {
-                            if (user.role === 'bod_pro_gis' && user.province === currentProvince) {
-                                let telegramMessage = '';
-
-                                telegramMessage = `**New request needs approval!**\n` +
-                                    `Creator: ${fullName} - ${userEmail}\n` +
-                                    `Station Name: ${stationName}\n` +
-                                    `Branch: ${data.data.branch}\n` +
-                                    `Station Code (7 digits): ${data.data.station_code_7_digits}\n` +
-                                    `Station Code: ${data.data.station_code}\n` +
-                                    `Station Type: ${data.data.station_type}\n` +
-                                    `Group: ${data.data.group}\n` +
-                                    `Created At: ${new Date().toLocaleString()}\n`;
-
-
-                                // Gửi tin nhắn đến Telegram
-                                await fetch('../sendTelegram.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        message: telegramMessage,
-                                        id_telegram: user.idtele
-                                    })
-                                });
-
-
-                            }
-                        });
                         Swal.fire({
                             position: "center",
                             icon: "success",
@@ -887,11 +858,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            // alert('Data submitted successfully!');
-                            // reload this page
-                            // location.reload();
                             window.location.href = 'home.php';
-                            
                         });
                     } else {
                         Swal.close();
@@ -903,14 +870,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     Swal.close();
                     alert('An error occurred.');
                 });
-        };
-
-        function showFileNames(input) {
-            var fileNamesDiv = document.getElementById(input.id + '_names');
-            fileNamesDiv.innerHTML = ''; // Clear previous file names
-            for (var i = 0; i < input.files.length; i++) {
-                fileNamesDiv.innerHTML += '<div class="col-md-12 text-end">' + input.files[i].name + '</div>';
-            }
         }
 
         // show hide fields
@@ -951,6 +910,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // remove attribute required
                 document.getElementById(field).removeAttribute('required');
             });
+        }
+
+        function uploadImagesToGoogleDrive(input) {
+            const files = input.files;
+            const fileKey = input.id; // Use the input ID to identify the field
+            const hiddenInput = document.getElementById(fileKey + '_link'); // Get the hidden input field
+
+            if (!hiddenInput) {
+                console.error(`Hidden input field with ID "${fileKey}_link" not found.`);
+                return; // Exit the function if the hidden input field is not found
+            }
+
+            const oldFileLinks = hiddenInput.value ? hiddenInput.value.split(',') : []; // Get old file links
+
+            // Delete old files from Google Drive
+            if (oldFileLinks.length > 0) {
+                fetch('backend/site/delete_image.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            fileLinks: oldFileLinks // Send all old file links to delete
+                        })
+                    }).then(response => response.json())
+                    .then(data => {
+                        if (data.status !== 'success') {
+                            console.error('Failed to delete old images:', data.message);
+                        }
+                    }).catch(error => console.error('Error deleting old images:', error));
+            }
+
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]); // Append each file to the FormData object
+            }
+
+            // Call API to upload the new files to Google Drive
+            fetch('backend/site/upload_image.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Update the hidden input field with the new file links (comma-separated)
+                        hiddenInput.value = data.fileLinks.join(',');
+
+                        // Store the URLs in the global object
+                        uploadedFilesMap[fileKey] = data.fileLinks;
+
+                        // Display the uploaded file links
+                        const fileNamesDiv = document.getElementById(fileKey + '_names');
+                        if (fileNamesDiv) {
+                            fileNamesDiv.innerHTML = data.fileLinks
+                                .map((link, index) => `<a href="${link}" class='col-md-12 text-end' target="_blank">Uploaded Image ${index + 1}</a>`)
+                                .join('<br>');
+                        }
+                        console.log('Uploaded files map:', uploadedFilesMap);
+                    } else {
+                        console.error('Failed to upload images:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error uploading images:', error));
         }
     </script>
 </body>
