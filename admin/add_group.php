@@ -125,14 +125,22 @@ echo '</script>';
         </div>
         <hr>
 
-        <!-- Form to submit station name and reference station -->
-        <form id="form-create">
+        <!-- Form to update user information -->
+        <form id="form-user-update">
+            <div class="form-group row mt-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="fullname"><?= translate('Full Name', $language) ?>:</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" id="fullname" name="fullname" value="<?= $usersData['fullname']; ?>" required>
+                </div>
+            </div>
             <div class="form-group row mt-3">
                 <div class="col-md-4">
                     <label class="form-label" for="email"><?= translate('Email', $language) ?>:</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" type="email" id="email" name="email" value="<?= $usersData['email']; ?>" required disabled>
+                    <input class="form-control" type="email" id="email" name="email" value="<?= $usersData['email']; ?>" required>
                 </div>
             </div>
             <div class="form-group row mt-3">
@@ -174,7 +182,7 @@ echo '</script>';
                     <label class="form-label" for="phone"><?= translate('Phone', $language) ?>:</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" type="text" id="phone" name="phone" value="<?= $usersData['phone']; ?>" required disabled>
+                    <input class="form-control" type="text" id="phone" name="phone" value="<?= $usersData['phone']; ?>" required>
                 </div>
             </div>
             <div class="form-group row mt-3">
@@ -182,7 +190,7 @@ echo '</script>';
                     <label class="form-label" for="idtele"><?= translate('ID telegram', $language) ?>:</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" type="text" id="idtele" name="idtele" value="<?= $usersData['idtele']; ?>" required disabled>
+                    <input class="form-control" type="text" id="idtele" name="idtele" value="<?= $usersData['idtele']; ?>" required>
                 </div>
             </div>
             <?php
@@ -228,38 +236,40 @@ echo '</script>';
             ?>
         </form>
 
-        <!-- Modal confirm -->
+        <!-- Modal confirm for staff with group -->
         <div class="modal fade" id="exampleModalApprove" tabindex="-1" aria-labelledby="exampleModalApproveLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalApproveLabel">Confirm Add Group</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalApproveLabel">
+                            <?= isset($usersData['group']) && $usersData['group'] !== '' ? 'Update User Information' : 'Add Group' ?>
+                        </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to add group with email <?= $usersData['email']; ?>?</p>
+                        <p><?= isset($usersData['group']) && $usersData['group'] !== '' ? 'Are you sure you want to update user information?' : 'Are you sure you want to add this group to the user?' ?></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="handleAddGroup()">Submit</button>
+                        <button type="button" class="btn btn-primary" onclick="updateUserInfo()">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal confirm -->
+        <!-- Modal confirm for non-staff users -->
         <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel">Confirm Add Group</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalUpdateLabel">Update User Information</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to update information for email <?= $usersData['email']; ?>?</p>
+                        <p>Are you sure you want to update information for this user?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="rejectSubmitButton" onclick="handleUpdateInfo()">Submit</button>
+                        <button type="button" class="btn btn-primary" onclick="updateUserInfo()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -267,46 +277,62 @@ echo '</script>';
     </div>
 
     <script>
-        const exampleModalUpdate = document.getElementById('exampleModalUpdate')
-        const exampleModalApprove = document.getElementById('exampleModalApprove')
-        // JavaScript function to validate the form before saving or submitting
-        function validateForm(action) {
-            var form = document.getElementById('form-info');
-            var fileInputs = document.querySelectorAll('input[type="file"]');
-            var allFilesValid = true;
-
-            fileInputs.forEach(function(fileInput) {
-                if (fileInput.required && fileInput.files.length === 0) {
-                    allFilesValid = false;
-                    fileInput.classList.add('is-invalid');
+        const exampleModalUpdate = document.getElementById('exampleModalUpdate');
+        const exampleModalApprove = document.getElementById('exampleModalApprove');
+        
+        // Function to update user information
+        function updateUserInfo() {
+            // Get form data
+            const form = document.getElementById('form-user-update');
+            const formData = new FormData(form);
+            formData.append('userId', '<?= $userId ?>');
+            formData.append('action', 'update_user');
+            
+            // Send an AJAX request to update the user information
+            fetch('update_user.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(exampleModalUpdate) || 
+                              bootstrap.Modal.getInstance(exampleModalApprove);
+                modal.hide();
+                
+                if (data.status === 'success') {
+                    // Show success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: data.message,
+                        showConfirmButton: true
+                    }).then(() => {
+                        // Redirect to the home page
+                        window.location.href = 'home.php';
+                    });
                 } else {
-                    fileInput.classList.remove('is-invalid');
+                    // Show error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                        showConfirmButton: true
+                    });
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An unexpected error occurred. Please try again.',
+                    showConfirmButton: true
+                });
             });
-
-            if (form.checkValidity() && allFilesValid) {
-                if (action === 'save') {
-                    saveInfo();
-                } else if (action === 'submit') {
-                    submitInfo();
-                }
-            } else {
-                if (!allFilesValid) {
-                    alert('Please upload the required files.');
-                }
-                form.reportValidity();
-            }
         }
-        // JavaScript function to toggle the visibility of notes
-        function toggleNote(variable) {
-            const note = document.getElementById(variable + '-note');
-            if (note.style.display === "none" || note.style.display === "") {
-                note.style.display = "block"; // Show the note
-            } else {
-                note.style.display = "none"; // Hide the note
-            }
-        }
-        // enable popover
+        
+        // Enable popover
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
         const popover = new bootstrap.Popover('.popover-dismiss', {

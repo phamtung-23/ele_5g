@@ -776,12 +776,23 @@ if ($dataResponse['status'] === 'success') {
         };
 
         function handleApprove() {
+            // Get all form data
+            const form = document.getElementById('form-info');
+            const formData = new FormData(form);
+            
+            // Convert FormData to object
+            const formDataObject = {};
+            formData.forEach((value, key) => {
+                formDataObject[key] = value;
+            });
+            
             fetch('backend/site/approve_info.php', {
                     method: 'POST',
                     body: JSON.stringify({
                         station_name: document.getElementById('station_name').value,
                         email: userEmail,
-                        role: '<?= $_SESSION['role'] ?>'
+                        role: '<?= $_SESSION['role'] ?>',
+                        site_data: formDataObject
                     }),
                     headers: {
                         'Content-Type': 'application/json'

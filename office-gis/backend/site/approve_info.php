@@ -24,17 +24,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       exit;
     }
 
-    foreach ($dataPrevious['approval'] as $index => $approval) {
-      if ($approval['role'] === $userRole) {
-      // Update the status to approved
-      $dataPrevious['approval'][$index]['email'] = $data['email'];
-      $dataPrevious['approval'][$index]['status'] = 'approved';
-      $dataPrevious['approval'][$index]['updateTime'] = date('Y-m-d H:i:s');
+    // Update the site data with the submitted changes
+    if (isset($data['site_data']) && is_array($data['site_data'])) {
+      // Merge the updated fields with the previous data
+      foreach ($data['site_data'] as $key => $value) {
+        // Don't update image fields - we keep the existing image links
+        if (!strpos($key, '_img') && !strpos($key, '_link')) {
+          $dataPrevious[$key] = $value;
+        }
       }
     }
 
+    // Update the approval status
+    foreach ($dataPrevious['approval'] as $index => $approval) {
+      if ($approval['role'] === $userRole) {
+        // Update the status to approved
+        $dataPrevious['approval'][$index]['email'] = $data['email'];
+        $dataPrevious['approval'][$index]['status'] = 'approved';
+        $dataPrevious['approval'][$index]['updateTime'] = date('Y-m-d H:i:s');
+      }
+    }
 
-
+    // Update the modified time
+    $dataPrevious['updated_at'] = date('Y-m-d H:i:s');
+    
     // Save the updated data
     $response = updateDataToJson($dataPrevious, $directory, $stationName);
 

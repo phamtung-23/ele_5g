@@ -316,6 +316,23 @@ echo "</script>";
             display: none;
         }
 
+        .export-btn {
+            background-color: #2196F3;
+            /* Blue color for export button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 15px;
+        }
+
+        .export-btn:hover {
+            background-color: #0b7dda;
+            /* Darker blue on hover */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -394,6 +411,10 @@ echo "</script>";
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <!-- Include DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <!-- Include SheetJS library for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Include FileSaver.js library for file download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 </head>
 
@@ -426,13 +447,13 @@ echo "</script>";
             <p><?= translate('Welcome', $language) ?>, <?php echo $fullName; ?>!</p>
         </div>
 
-        <div class="content">
-
-
-            <!-- Data Table -->
+        <div class="content">            <!-- Data Table -->
             <table id="dataTable">
                 <!-- title for table management -->
-                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">Station Management</caption>
+                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
+                    <?= translate('Station Management', $language) ?>
+                    <button id="exportToExcel" class="export-btn" style="float: right;"><?= translate('Export to Excel', $language) ?></button>
+                </caption>
                 <thead>
                     <tr>
                         <th><?= translate('No', $language) ?></th>
@@ -518,8 +539,7 @@ echo "</script>";
                 </tbody>
             </table>
         </div>
-    </div>
-    <script>
+    </div>    <script>
         // Initialize DataTable with search, pagination, and other features
         $(document).ready(function() {
             $('#dataTable').DataTable({
@@ -528,7 +548,45 @@ echo "</script>";
                 "ordering": true,
                 "info": true
             });
+            
+            // Excel export functionality
+            $('#exportToExcel').click(function() {
+                exportTableToExcel('dataTable', '<?= translate('Station_Management', $language) ?>_' + formatDate(new Date()));
+            });
         });
+        
+        // Function to format date for filename
+        function formatDate(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return year + month + day;
+        }
+        
+        // Function to export the table to Excel
+        function exportTableToExcel(tableID, filename) {
+            // Clone the table to work with a copy
+            const table = document.getElementById(tableID);
+            const cloneTable = table.cloneNode(true);
+            
+            // Remove the action column and buttons (last column)
+            const rows = cloneTable.rows;
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].cells.length > 0) {
+                    rows[i].deleteCell(rows[i].cells.length - 1); // Delete last cell (Action column)
+                }
+            }
+            
+            // Create workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.table_to_sheet(cloneTable);
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, "<?= translate('Station Management', $language) ?>");
+            
+            // Generate Excel file and trigger download
+            XLSX.writeFile(wb, filename + '.xlsx');
+        }
 
         // Update functionality (for example, open a modal to update the record)
         function handleViewDetail(id) {

@@ -285,9 +285,45 @@ echo "</script>";
 .submit-btn:hover {
     background-color: #45a049; /* Thay đổi màu nền khi hover */
 }
+
+.action-button {
+    padding: 5px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
 .hidden {
     display: none;
 }
+
+.export-btn {
+    background-color: #2196F3; /* Blue color for export button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 15px;
+}
+
+.export-btn:hover {
+    background-color: #0b7dda; /* Darker blue on hover */
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -355,6 +391,10 @@ table th:nth-child(n+31):nth-child(-n+38) {
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 <!-- Include DataTables JS -->
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<!-- Include SheetJS library for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- Include FileSaver.js library for file download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 </head>
 
@@ -385,7 +425,10 @@ table th:nth-child(n+31):nth-child(-n+38) {
             
             <!-- Data Table -->
             <table id="dataTable">
-                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">User Management</caption>
+                <caption style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
+                    User Management 
+                    <button id="exportToExcel" class="export-btn" style="float: right;">Export to Excel</button>
+                </caption>
                 <thead>
                     <tr>
                         <th>No</th>
@@ -430,10 +473,12 @@ table th:nth-child(n+31):nth-child(-n+38) {
                                             if ($itemStatus !== 'Active') {
                                                 echo '<td style="display: flex; justify-content: center;">
                                                         <button class="action-button" style="padding: 5px;" onclick="handleViewDetail(\'' . $userInfo['id'] . '\')">Add group</button>
+                                                        <button class="delete-button" onclick="confirmDelete(\'' . $userInfo['id'] . '\', \'' . $fullName . '\')">Delete</button>
                                                     </td>';
                                             }else{
                                                 echo '<td style="display: flex; justify-content: center;">
                                                         <button class="action-button" style="padding: 5px;" onclick="handleViewDetail(\'' . $userInfo['id'] . '\')">Detail</button>
+                                                        <button class="delete-button" onclick="confirmDelete(\'' . $userInfo['id'] . '\', \'' . $fullName . '\')">Delete</button>
                                                     </td>';
                                             }
                                         ?>
@@ -456,13 +501,83 @@ table th:nth-child(n+31):nth-child(-n+38) {
                 "ordering": true,
                 "info": true
             });
+            
+            // Excel export functionality
+            $('#exportToExcel').click(function() {
+                exportTableToExcel('dataTable', 'User_Management_' + formatDate(new Date()));
+            });
         });
+        
+        // Function to format date for filename
+        function formatDate(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return year + month + day;
+        }
+        
+        // Function to export the table to Excel
+        function exportTableToExcel(tableID, filename) {
+            // Clone the table to work with a copy
+            const table = document.getElementById(tableID);
+            const cloneTable = table.cloneNode(true);
+            
+            // Remove the action column and buttons (last column)
+            const rows = cloneTable.rows;
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].cells.length > 0) {
+                    rows[i].deleteCell(rows[i].cells.length - 1); // Delete last cell (Action column)
+                }
+            }
+            
+            // Create workbook and worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.table_to_sheet(cloneTable);
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, "User Management");
+            
+            // Generate Excel file and trigger download
+            XLSX.writeFile(wb, filename + '.xlsx');
+        }
 
         // Update functionality (for example, open a modal to update the record)
         function handleViewDetail(id) {
             // redirect to the update page
             window.location.href = 'add_group.php?user_id=' + id;
         }
+
+        // Function to confirm and handle user deletion
+        function confirmDelete(id, name) {
+            if(confirm("Are you sure you want to delete user " + name + "?")) {
+                // If confirmed, send a request to delete the user
+                // Create form data
+                var formData = new FormData();
+                formData.append('user_id', id);
+                formData.append('action', 'delete');
+
+                // Send request
+                fetch('delete_user.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert('User deleted successfully');
+                        // Reload the page to refresh the user list
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the user');
+                });
+            }
+        }
+
         // Toggle the responsive class to show/hide the menu
         function toggleMenu() {
             var menu = document.querySelector('.menu');
